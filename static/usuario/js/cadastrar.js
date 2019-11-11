@@ -1,4 +1,4 @@
-let URL = 'https://http://localhost:8080/usuario';
+let URL = 'http://localhost:8080/usuario';
 let $botaoCadastrar = document.querySelector("#criar");
 $botaoCadastrar.addEventListener('click', cadastrar_usuario);
 
@@ -17,9 +17,6 @@ function cadastrar_usuario() {
   })
   .then(r => r.json())
   .then(u => {
-      console.log(u);
       console.log('Pronto! Usuario criado com sucesso!');
-      usuarios.push(u);
-      fetch_usuarios();
   });
 }
