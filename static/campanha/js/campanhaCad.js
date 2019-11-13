@@ -22,6 +22,13 @@ function cadastrar_campanha() {
   .then(u => {
       
       console.log('Pronto! Campanha criada com sucesso!');
+      roteiaPaginaHome();
       
   });
+}
+
+function roteiaPaginaHome() {
+
+  window.location.replace("http://localhost:8080/home");
+
 }

@@ -18,5 +18,12 @@ function cadastrar_usuario() {
   .then(r => r.json())
   .then(u => {
       console.log('Pronto! Usuario criado com sucesso!');
+      roteiaPaginaAleatoria(); 
   });
+}
+
+function roteiaPaginaAleatoria() {
+
+  window.location.replace("http://localhost:8080/home");
+
 }

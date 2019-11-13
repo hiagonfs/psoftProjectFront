@@ -1,6 +1,10 @@
 let URL = 'http://localhost:8080/login';
-let $botaoLogar = document.querySelector("#criar");
+
+let $botaoLogar = document.querySelector("#logar");
+let $botaoCadastrar = document.querySelector("#cadastrar");
+
 $botaoLogar.addEventListener('click', logar);
+$botaoCadastrar.addEventListener('click', roteiaPaginaCadastro);
 
 function logar() {
 
@@ -17,7 +21,20 @@ function logar() {
       .then(u => {
 
           console.log('Pronto! Logando no sistema!');
+          roteiaPaginaHome(); 
           
       });
+
+}
+
+function roteiaPaginaHome() {
+
+   window.location.replace("http://localhost:8080/home");
+
+}
+
+function roteiaPaginaCadastro() {
+
+   window.location.replace("http://localhost:8080/cadastro");
 
 }
