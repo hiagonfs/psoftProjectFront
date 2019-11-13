@@ -1,4 +1,4 @@
-let URL = 'https://http://localhost:8080/usuario';
+let URL = 'http://localhost:8080/usuario';
 let $botaoCadastrar = document.querySelector("#criar");
 $botaoCadastrar.addEventListener('click', cadastrar_usuario);
 
