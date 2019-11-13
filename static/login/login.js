@@ -1,40 +1,90 @@
-let URL = 'http://localhost:8080/login';
+let username;
+let $viewer = document.querySelector('#viewer');
 
-let $botaoLogar = document.querySelector("#logar");
-let $botaoCadastrar = document.querySelector("#cadastrar");
+(async function main() {
+  
+    // roteamento
+    let hash = location.hash;
+    if (["", "#viewLogin"].includes(hash)) {
+      viewLogin();
 
-$botaoLogar.addEventListener('click', logar);
-$botaoCadastrar.addEventListener('click', roteiaPaginaCadastro);
+    } 
+    
+    else if (["#viewCadastroUsuario"].includes(hash)){
+        viewCadastroUsuario(); 
+    } 
+    
+    else if (["#viewHome"].includes(hash)) {
+      viewHome();
+    } 
+    
+    else if(["viewCadastraCampanha"].includes(hash)) {
+        viewCadastraCampanha(); 
+    }
+
+  }());
+
+function viewLogin() {
+    
+    let $template = document.querySelector('#viewLogin');
+    $viewer.innerHTML = $template.innerHTML;
+
+    let $botaoLogar = document.querySelector("#logar");
+    let $botaoCadastrar = document.querySelector("#cadastrar");
+
+    $botaoLogar.addEventListener('click', viewCadastraCampanha);
+    $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
+  
+}
+
+function viewCadastroUsuario () {
+
+    let $template = document.querySelector('#viewCadastroUsuario');
+    $viewer.innerHTML = $template.innerHTML;
+
+    let $botaoCadastrar = document.querySelector("#criar");
+    $botaoCadastrar.addEventListener('click', cadastrar_usuario);
+
+}
+
+
+function viewHome() {
+
+    let $template = document.querySelector('#viewHome');
+    $viewer.innerHTML = $template.innerHTML;
+
+}
 
 function logar() {
 
-    let email = document.querySelector("#email").value;
-    let senha = document.querySelector("#senha").value;
+    let URL = 'http://localhost:8080/login';
 
-    fetch(URL, {
-        'method': 'POST',
-        'body': `{"email": "${email}", 
-                  "senha": "${senha}"`,
-        'headers': {'Content-Type': 'application/json'}
-      })
-      .then(r => r.json()) 
-      .then(u => {
+    // let email = document.querySelector("#email").value;
+    // let senha = document.querySelector("#senha").value;
 
-          console.log('Pronto! Logando no sistema!');
-          roteiaPaginaHome(); 
+    // fetch(URL, {
+    //     'method': 'POST',
+    //     'body': `{"email": "${email}", 
+    //               "senha": "${senha}"`,
+    //     'headers': {'Content-Type': 'application/json'}
+    //   })
+    //   .then(r => r.json()) 
+    //   .then(u => {
+
+    //       console.log('Pronto! Logando no sistema!');
+    //       roteiaPaginaHome(); 
           
-      });
+    //   });
 
 }
 
-function roteiaPaginaHome() {
+function viewCadastraCampanha() {
 
-   window.location.replace("http://localhost:8080/home");
+    let $template = document.querySelector('#viewCadastraCampanha');
+    $viewer.innerHTML = $template.innerHTML;
 
-}
+    let $botaoCadastrarCampanha = document.querySelector("#cadastrarCampanha");
 
-function roteiaPaginaCadastro() {
-
-   window.location.replace("http://localhost:8080/cadastro");
+    $botaoCadastrarCampanha.addEventListener('click', cadastroDeCampanha);
 
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,70 @@
     <script type="module" src="../../static/login/login.js"></script>
     <title>AJudE</title>
 </head>
+
 <body>
-    
-    <h1>Login do Sistema</h1>
 
-    <p>E-mail: <input id="email" type="text"></p>
-    <p>Senha: <input id="senha" type="password"></p>
+    <div id="viewer"></div>
 
-    <button id="logar">Login</button>
+    <template id="viewLogin">
+        <h1>Login do Sistema</h1>
 
-    <button id="cadastrar">Cadastro</button>
+        <p>E-mail:
+            <input id="email" type="text">
+        </p>
+        <p>Senha:
+            <input id="senha" type="password">
+        </p>
+
+        <button id="logar">Login</button>
+
+        <button id="cadastrar">Cadastro</button>
+    </template>
+
+    <template id="viewCadastroUsuario">
+        <h1>Cadastro de Usuario no Sistema</h1>
+  <p>Nome: <input id="nome" type="text"></p>
+  <p>Sobrenome: <input id="sobrenome" type="text"></p>
+  <p>Email: <input id="email" type="text"></p>
+  <p>Número do cartão de crédito: <input id="numCartaoCredito" type="text"></p>
+  <p>Senha: <input id="senha" type="password"></p>
+  <button id="criar">Salvar usuário</button>
+    </template>
+
+    <template id="viewHome">
+        <h1>Bem-vindo!</h1>
+
+        <p>E-mail:
+            <input id="email" type="text">
+        </p>
+        <p>Senha:
+            <input id="senha" type="password">
+        </p>
+
+        <button id="logar">Login</button>
+
+        <button id="cadastrar">Cadastro</button>
+    </template>
+
+    <template id="viewCadastraCampanha">
+        <h1>Página para cadastro de Campanhas!</h1>
+
+        <p>nome:
+            <input id="nome" type="text">
+        </p>
+        <p>Descricao:
+            <input id="descricao" type="text">
+        </p>
+        <p>
+            <input id="date" type="date">
+        </p>
+        <p>Meta:
+            <input id="meta" type="text">
+        </p>
+
+        <button id="cadastrarCampanha">Cadastrar</button>
+    </template>
 
 </body>
+
 </html>
