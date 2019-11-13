@@ -17,9 +17,6 @@ function cadastrar_usuario() {
   })
   .then(r => r.json())
   .then(u => {
-      console.log(u);
       console.log('Pronto! Usuario criado com sucesso!');
-      usuarios.push(u);
-      fetch_usuarios();
   });
 }
