@@ -30,27 +30,48 @@
 
     <template id="viewCadastroUsuario">
         <h1>Cadastro de Usuario no Sistema</h1>
-  <p>Nome: <input id="nome" type="text"></p>
-  <p>Sobrenome: <input id="sobrenome" type="text"></p>
-  <p>Email: <input id="email" type="text"></p>
-  <p>Número do cartão de crédito: <input id="numCartaoCredito" type="text"></p>
-  <p>Senha: <input id="senha" type="password"></p>
-  <button id="criar">Salvar usuário</button>
+        <p>Nome:
+            <input id="nome" type="text">
+        </p>
+        <p>Sobrenome:
+            <input id="sobrenome" type="text">
+        </p>
+        <p>Email:
+            <input id="email" type="text">
+        </p>
+        <p>Número do cartão de crédito:
+            <input id="numCartaoCredito" type="text">
+        </p>
+        <p>Senha:
+            <input id="senha" type="password">
+        </p>
+        <button id="criar">Salvar usuário</button>
     </template>
 
     <template id="viewHome">
         <h1>Bem-vindo!</h1>
 
-        <p>E-mail:
-            <input id="email" type="text">
-        </p>
-        <p>Senha:
-            <input id="senha" type="password">
+        <h2>Aqui está o seu perfil:</h2>
+
+        <div id="infoUsuario"></div>
+
+        <button id="paginaDeCampanha">Campanhas</button>
+
+    </template>
+
+    <template id="viewPaginaCampanha">
+        <h1>Pagina com as campanhas</h1>
+
+        <h2>Selecione a opção desejada:</h2>
+
+        <div id="infoCampanhas"></div>
+
+        <p>Buscar por campanhas:
+            <input id="buscarCampanhas" type="text">
         </p>
 
-        <button id="logar">Login</button>
+        <button id="procurarCampanhas">Buscar Campanhas!</button>
 
-        <button id="cadastrar">Cadastro</button>
     </template>
 
     <template id="viewCadastraCampanha">
