@@ -1,4 +1,5 @@
 let username;
+const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 
 (async function main() {
@@ -55,17 +56,35 @@ function viewHome() {
 }
 
 function cadastrar_usuario() {
-  
+  let nome = document.querySelector("#nome").value;
+  let sobrenome = document.querySelector("#sobrenome").value;
+  let email = document.querySelector("#email").value;
+  let numCartaoCredito = document.querySelector("#numCartaoCredito").value;
+  let senha = document.querySelector("#senha").value;
+
+  fetch(baseURL + 'usuarios', {
+    'method': 'POST',
+    'body': `{"nome": "${nome}",
+              "sobrenome": "${sobrenome}",
+              "email": "${email}",
+              "numCartaoCredito": "${numCartaoCredito}",
+              "senha": "${senha}"}`,
+    'headers': {'Content-Type': 'application/json'}
+  })
+  .then(r => r.json())
+  .then(u => {
+      console.log(u);
+      console.log('Pronto! Usuario cadastrado no sistema!');
+      viewHome();
+  });
+
 }
 
 function logar() {
-
-    let URL = 'http://localhost:8080/auth/login';
-
      let email = document.querySelector("#email").value;
      let senha = document.querySelector("#senha").value;
 
-     fetch(URL, {
+     fetch(baseURL + 'auth/login', {
          'method': 'POST',
          'body': `{"email": "${email}",
                    "senha": "${senha}"}`,
@@ -73,13 +92,10 @@ function logar() {
        })
        .then(r => r.json())
        .then(u => {
-           console.log(email);
-           console.log(senha);
            console.log(u);
            console.log('Pronto! Logando no sistema!');
            viewCadastraCampanha();
        });
-
 }
 
 function viewCadastraCampanha() {
