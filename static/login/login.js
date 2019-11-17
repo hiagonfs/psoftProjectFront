@@ -30,22 +30,29 @@ function viewLogin() {
     $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
 }
 
-function logar() {
+async function logar() {
      let email = document.querySelector("#email").value;
      let senha = document.querySelector("#senha").value;
-
-     fetch(baseURL + 'auth/login', {
+     let resposta = await fetch(baseURL + 'auth/login', {
          'method': 'POST',
          'body': `{"email": "${email}",
                    "senha": "${senha}"}`,
          'headers': {'Content-Type': 'application/json'}
        })
-       .then(r => r.json())
-       .then(u => {
-           console.log(u);
-           console.log('Pronto! Logando no sistema!');
-           viewCadastraCampanha();
-       });
+      let json = await resposta.json();
+      console.log(json);
+
+      if (resposta.status == 200) {
+        localStorage.setItem('token', json.token);
+        localStorage.setItem('emailUsuario', email);
+        console.log('Pronto! Logando no sistema!');
+        viewCadastraCampanha();
+      }
+      else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('emailUsuario');
+        console.log('Ops! Login mal sucedido');
+      }
 }
 
 function viewHome() {
@@ -103,14 +110,15 @@ function cadastrar_campanha() {
   let URLCampanha = defineURLUnicaCampanha(nomeCurto);
   console.log(URLCampanha);
 
-  fetch(URL, {
+  fetch(baseURL + '/campanha', {
     'method': 'POST',
     'body': `{"nome": "${nome}",
               "nomeCurto": "${nomeCurto}",
               "descricao": "${descricao}",
               "deadline": "${deadline}",
               "meta": "${meta}"}`,
-    'headers': {'Content-Type': 'application/json'}
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
   })
   .then(r => r.json())
   .then(u => {
