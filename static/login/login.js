@@ -100,31 +100,36 @@ function viewCadastraCampanha() {
     $botaoCadastrarCampanha.addEventListener('click', cadastrar_campanha);
 }
 
-function cadastrar_campanha() {
+async function cadastrar_campanha() {
   let nome = document.querySelector("#nome").value;
-  let nomeCurto = document.querySelector("#nomeCurto").value;
   let descricao = document.querySelector("#descricao").value;
   let deadline = document.querySelector("#deadline").value;
   let meta = document.querySelector("#meta").value;
 
-  let URLCampanha = defineURLUnicaCampanha(nomeCurto);
+  let URLCampanha = defineURLUnicaCampanha(nome);
   console.log(URLCampanha);
 
-  fetch(baseURL + 'campanha', {
+  console.log(localStorage.getItem("token"));
+
+  let resposta = await fetch(baseURL + 'campanha', {
     'method': 'POST',
-    'body': `{"nome": "${nomeCurto}",
+    'body': `{"nome": "${nome}",
               "nomeCurto": "${URLCampanha}",
               "descricao": "${descricao}",
               "deadline": "${deadline}",
               "meta": "${meta}"}`,
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
-  })
-  .then(r => r.json())
-  .then(u => {
-      console.log('Pronto! Campanha criada com sucesso!');
-      roteiaPaginaHome();
   });
+
+  let json = await resposta.json();
+
+  if (resposta.status == 201) {
+    console.log('Pronto! Campanha criada com sucesso!');
+  }
+  else {
+    console.log(resposta.status);
+  }
 }
 
 function defineURLUnicaCampanha (nomeCurto) {
