@@ -110,7 +110,7 @@ function cadastrar_campanha() {
   let URLCampanha = defineURLUnicaCampanha(nomeCurto);
   console.log(URLCampanha);
 
-  fetch(baseURL + '/campanha', {
+  fetch(baseURL + 'campanha', {
     'method': 'POST',
     'body': `{"nome": "${nome}",
               "nomeCurto": "${nomeCurto}",
