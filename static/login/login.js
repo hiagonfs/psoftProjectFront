@@ -112,8 +112,8 @@ function cadastrar_campanha() {
 
   fetch(baseURL + 'campanha', {
     'method': 'POST',
-    'body': `{"nome": "${nome}",
-              "nomeCurto": "${nomeCurto}",
+    'body': `{"nome": "${nomeCurto}",
+              "nomeCurto": "${URLCampanha}",
               "descricao": "${descricao}",
               "deadline": "${deadline}",
               "meta": "${meta}"}`,
@@ -132,6 +132,7 @@ function defineURLUnicaCampanha (nomeCurto) {
   console.log(URLCampanha);
 
   //1) todo caractere de pontuação será trocado por espaço
+  URLCampanha = URLCampanha.replace(new RegExp('["".:,;!?()[]{}-_]', 'gi'), ' ');
   //2) todo caractere acentuado é trocado por equivalente sem acento
   URLCampanha = removeAcento(URLCampanha);
   console.log(URLCampanha);
