@@ -59,30 +59,38 @@ async function logar() {
       }
 }
 
-function viewHome() {
+await function viewHome() {
 
     let $template = document.querySelector('#viewHome');
     $viewer.innerHTML = $template.innerHTML;
 
-    let infos;
+    let resposta = await fetch(baseURL + 'usuario', {
+      'method': 'GET',
+      'headers': {'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + localStorage.getItem("token")}
+    })
 
-    fetch(baseURL + 'usuario')
-    .then(r => r.json())
-    .then(infos)
+    let json = await resposta.json();
 
-    let $informacoes = document.querySelector("#infoUsuario");
+    if (resposta.status == 200) {
+      let $informacoes = document.querySelector("#infoUsuario");
+      $informacoes.innerHTML = '';
 
-    $informacoes.innerHTML = '';
+      let $p = document.createElement("p");
+      $informacoes.appendChild($p);
+      $p.innerText = "Nome: " + json.nome + ", Sobrenome: " + json.sobrenome;
 
-    let $p = document.createElement("p");
-    $informacoes.appendChild($p);
-    $p.innerText = "Nome: " + infos.nome + ", Sobrenome: " + infos.sobrenome + "E-mail: " + infos.email;
+      let $botaoAlterarInformacoes = document.querySelector("#alterarInfos");
+      let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
 
-    let $botaoAlterarInformacoes = document.querySelector("#alterarInfos");
-    let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
+      $botaoAlterarInformacoes.addEventListener('click', viewAlteracaoCadastro);
+      $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
+    }
+    else {
+      alert(json.message);
+    }
 
-    $botaoAlterarInformacoes.addEventListener('click', viewAlteracaoCadastro);
-    $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
+
 }
 
 function viewCadastroUsuario () {
