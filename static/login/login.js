@@ -50,7 +50,7 @@ async function logar() {
       if (resposta.status == 200) {
         localStorage.setItem('token', json.token);
         localStorage.setItem('emailUsuario', email);
-        viewCadastraCampanha();
+        viewHome();
       }
       else {
         localStorage.removeItem('token');
@@ -60,20 +60,19 @@ async function logar() {
 }
 
 function viewHome() {
-<<<<<<< HEAD
 
     let $template = document.querySelector('#viewHome');
-    $viewer.innerHTML = $template.innerHTML;    
+    $viewer.innerHTML = $template.innerHTML;
 
     let infos;
-    
-    fetch(API + '/usuario')
+
+    fetch(baseURL + 'usuario')
     .then(r => r.json())
     .then(infos)
 
     let $informacoes = document.querySelector("#infoUsuario");
 
-    $informacoes.innerHTML = ''; 
+    $informacoes.innerHTML = '';
 
     let $p = document.createElement("p");
     $informacoes.appendChild($p);
@@ -84,116 +83,109 @@ function viewHome() {
 
     $botaoAlterarInformacoes.addEventListener('click', viewAlteracaoCadastro);
     $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
-
-=======
-      let $template = document.querySelector('#viewHome');
-      $viewer.innerHTML = $template.innerHTML;
->>>>>>> b7770afb01291d191b949b3fa9bd86113ec4501b
 }
 
 function viewCadastroUsuario () {
-      let $template = document.querySelector('#viewCadastroUsuario');
-      $viewer.innerHTML = $template.innerHTML;
+  let $template = document.querySelector('#viewCadastroUsuario');
+  $viewer.innerHTML = $template.innerHTML;
 
-      let $botaoCadastrar = document.querySelector("#criar");
-      $botaoCadastrar.addEventListener('click', cadastrar_usuario);
+  let $botaoCadastrar = document.querySelector("#criar");
+  $botaoCadastrar.addEventListener('click', cadastrar_usuario);
 }
 
 async function cadastrar_usuario() {
-      let nome = document.querySelector("#nome").value;
-      let sobrenome = document.querySelector("#sobrenome").value;
-      let email = document.querySelector("#email").value;
-      let numCartaoCredito = document.querySelector("#numCartaoCredito").value;
-      let senha = document.querySelector("#senha").value;
-      let resposta = await fetch(baseURL + 'usuarios', {
-        'method': 'POST',
-        'body': `{"nome": "${nome}",
-                  "sobrenome": "${sobrenome}",
-                  "email": "${email}",
-                  "numCartaoCredito": "${numCartaoCredito}",
-                  "senha": "${senha}"}`,
-        'headers': {'Content-Type': 'application/json'}
-      })
-      let json = await resposta.json();
+  let nome = document.querySelector("#nome").value;
+  let sobrenome = document.querySelector("#sobrenome").value;
+  let email = document.querySelector("#email").value;
+  let numCartaoCredito = document.querySelector("#numCartaoCredito").value;
+  let senha = document.querySelector("#senha").value;
+  let resposta = await fetch(baseURL + 'usuarios', {
+    'method': 'POST',
+    'body': `{"nome": "${nome}",
+              "sobrenome": "${sobrenome}",
+              "email": "${email}",
+              "numCartaoCredito": "${numCartaoCredito}",
+              "senha": "${senha}"}`,
+    'headers': {'Content-Type': 'application/json'}
+  })
+  let json = await resposta.json();
 
-      if (resposta.status == 201) {
-        viewHome();
-      }
-      else {
-        alert(json.message);
-      }
+  if (resposta.status == 201) {
+    viewHome();
+  }
+  else {
+    alert(json.message);
+  }
 }
 
 function viewCadastraCampanha() {
-      let $template = document.querySelector('#viewCadastraCampanha');
-      $viewer.innerHTML = $template.innerHTML;
+  let $template = document.querySelector('#viewCadastraCampanha');
+  $viewer.innerHTML = $template.innerHTML;
 
-      let $botaoCadastrarCampanha = document.querySelector("#cadastrarCampanha");
-      $botaoCadastrarCampanha.addEventListener('click', cadastrar_campanha);
+  let $botaoCadastrarCampanha = document.querySelector("#cadastrarCampanha");
+  $botaoCadastrarCampanha.addEventListener('click', cadastrar_campanha);
 }
 
 async function cadastrar_campanha() {
-      let nome = document.querySelector("#nome").value;
-      let descricao = document.querySelector("#descricao").value;
-      let deadline = document.querySelector("#deadline").value;
-      let meta = document.querySelector("#meta").value;
+  let nome = document.querySelector("#nome").value;
+  let descricao = document.querySelector("#descricao").value;
+  let deadline = document.querySelector("#deadline").value;
+  let meta = document.querySelector("#meta").value;
 
-      let URLCampanha = defineURLUnicaCampanha(nome);
-      console.log(URLCampanha);
+  let URLCampanha = defineURLUnicaCampanha(nome);
+  console.log(URLCampanha);
 
-      console.log(localStorage.getItem("token"));
+  let resposta = await fetch(baseURL + 'campanha', {
+    'method': 'POST',
+    'body': `{"nome": "${nome}",
+              "nomeCurto": "${URLCampanha}",
+              "descricao": "${descricao}",
+              "deadline": "${deadline}",
+              "meta": "${meta}"}`,
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  });
 
-      let resposta = await fetch(baseURL + 'campanha', {
-        'method': 'POST',
-        'body': `{"nome": "${nome}",
-                  "nomeCurto": "${URLCampanha}",
-                  "descricao": "${descricao}",
-                  "deadline": "${deadline}",
-                  "meta": "${meta}"}`,
-        'headers': {'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")}
-      });
+  let json = await resposta.json();
 
-      let json = await resposta.json();
-
-      if (resposta.status == 201) {
-        console.log('Pronto! Campanha criada com sucesso!');
-      }
-      else {
-        alert(json.message);
-      }
+  if (resposta.status == 201) {
+    console.log('Pronto! Campanha criada com sucesso!');
+  }
+  else {
+    alert(json.message);
+  }
 }
 
 function defineURLUnicaCampanha (nomeCurto) {
-      let URLCampanha = nomeCurto;
-      console.log(URLCampanha);
+  let URLCampanha = nomeCurto;
+  console.log(URLCampanha);
 
-      //1) todo caractere de pontuação será trocado por espaço
-      URLCampanha = URLCampanha.replace(/[.:,;!?(){}<>_-]/g, ' ');
-      console.log(URLCampanha);
-      //2) todo caractere acentuado é trocado por equivalente sem acento
-      URLCampanha = removeAcento(URLCampanha);
-      console.log(URLCampanha);
-      //3) todo caractere é colocado em minúscula
-      URLCampanha = URLCampanha.toLowerCase();
-      console.log(URLCampanha);
-      //4) espaços repetidos são trocados por um único espaço
-      URLCampanha = URLCampanha.replace(/\s{2,}/g, ' ');
-      console.log(URLCampanha);
-      //5) todo espaço será trocado por um hífen ("-")
-      URLCampanha = URLCampanha.replace(/ /g, "-");
+  //1) todo caractere de pontuação será trocado por espaço
+  URLCampanha = URLCampanha.replace(/[.:,;!?(){}<>_-]/g, ' ');
+  console.log(URLCampanha);
+  //2) todo caractere acentuado é trocado por equivalente sem acento
+  URLCampanha = removeAcento(URLCampanha);
+  console.log(URLCampanha);
+  //3) todo caractere é colocado em minúscula
+  URLCampanha = URLCampanha.toLowerCase();
+  console.log(URLCampanha);
+  //4) espaços repetidos são trocados por um único espaço
+  URLCampanha = URLCampanha.replace(/\s{2,}/g, ' ');
+  console.log(URLCampanha);
+  //5) todo espaço será trocado por um hífen ("-")
+  URLCampanha = URLCampanha.replace(/ /g, "-");
 
-      return URLCampanha;
+  return URLCampanha;
 }
 
 function removeAcento (text) {
-      text = text.replace(new RegExp('[ÁÀÂÃ]','gi'), 'a');
-      text = text.replace(new RegExp('[ÉÈÊ]','gi'), 'e');
-      text = text.replace(new RegExp('[ÍÌÎ]','gi'), 'i');
-      text = text.replace(new RegExp('[ÓÒÔÕ]','gi'), 'o');
-      text = text.replace(new RegExp('[ÚÙÛ]','gi'), 'u');
-      text = text.replace(new RegExp('[Ç]','gi'), 'c');
-      return text;
+  text = text.replace(new RegExp('[ÁÀÂÃ]','gi'), 'a');
+  text = text.replace(new RegExp('[ÉÈÊ]','gi'), 'e');
+  text = text.replace(new RegExp('[ÍÌÎ]','gi'), 'i');
+  text = text.replace(new RegExp('[ÓÒÔÕ]','gi'), 'o');
+  text = text.replace(new RegExp('[ÚÙÛ]','gi'), 'u');
+  text = text.replace(new RegExp('[Ç]','gi'), 'c');
+  return text;
 }
 
 function viewPaginaCampanha() {
@@ -201,7 +193,7 @@ function viewPaginaCampanha() {
   let $template = document.querySelector('#viewPaginaCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
-  let $textoDaBusca = document.querySelector("#textoParaBusca"); 
+  let $textoDaBusca = document.querySelector("#textoParaBusca");
 
   let $buscarPorCampanhas = document.querySelector("#procurarCampanhas");
 
@@ -209,10 +201,7 @@ function viewPaginaCampanha() {
 
 }
 
-function buscarCampanhas(textoDaBusca) {
-
-  let campanhas = [];
-
+async function buscarCampanhas(textoDaBusca) {
 //Ajustar esse método por completo para pegar as campanhas.
 
   let campanhas = await fetch(baseURL + 'campanha', {
@@ -222,7 +211,7 @@ function buscarCampanhas(textoDaBusca) {
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
   });
 
-  return campanhas; 
+  return campanhas;
 }
 
 function viewAlteracaoCadastro() {
