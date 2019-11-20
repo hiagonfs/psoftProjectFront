@@ -59,7 +59,7 @@ async function logar() {
       }
 }
 
-await function viewHome() {
+async function viewHome() {
 
     let $template = document.querySelector('#viewHome');
     $viewer.innerHTML = $template.innerHTML;
@@ -76,9 +76,9 @@ await function viewHome() {
       let $informacoes = document.querySelector("#infoUsuario");
       $informacoes.innerHTML = '';
 
-      let $p = document.createElement("p");
-      $informacoes.appendChild($p);
-      $p.innerText = "Nome: " + json.nome + ", Sobrenome: " + json.sobrenome;
+      let $h1 = document.createElement("h1");
+      $informacoes.appendChild($h1);
+      $h1.innerText = json.nome + " " + json.sobrenome;
 
       let $botaoAlterarInformacoes = document.querySelector("#alterarInfos");
       let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
@@ -107,7 +107,7 @@ async function cadastrar_usuario() {
   let email = document.querySelector("#email").value;
   let numCartaoCredito = document.querySelector("#numCartaoCredito").value;
   let senha = document.querySelector("#senha").value;
-  let resposta = await fetch(baseURL + 'usuarios', {
+  let resposta = await fetch(baseURL + 'usuario', {
     'method': 'POST',
     'body': `{"nome": "${nome}",
               "sobrenome": "${sobrenome}",
