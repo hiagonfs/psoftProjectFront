@@ -136,7 +136,8 @@ function defineURLUnicaCampanha (nomeCurto) {
       console.log(URLCampanha);
 
       //1) todo caractere de pontuação será trocado por espaço
-      URLCampanha = URLCampanha.replace(new RegExp('["".:,;!?()[]{}-_]', 'gi'), ' ');
+      URLCampanha = URLCampanha.replace(/[.:,;!?(){}<>_-]/g, ' ');
+      console.log(URLCampanha);
       //2) todo caractere acentuado é trocado por equivalente sem acento
       URLCampanha = removeAcento(URLCampanha);
       console.log(URLCampanha);
