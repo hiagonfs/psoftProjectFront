@@ -14,6 +14,12 @@ let $viewer = document.querySelector('#viewer');
     else if (["#viewHome"].includes(hash)) {
       viewHome();
     }
+    else if (["#viewPaginaCampanha"].includes(hash)) {
+      viewPaginaCampanha();
+    }
+    else if (["#viewAlteracaoCadastro"].includes(hash)) {
+      viewAlteracaoCadastro();
+    }
     else if(["viewCadastraCampanha"].includes(hash)) {
         viewCadastraCampanha();
     }
@@ -56,8 +62,30 @@ async function logar() {
 }
 
 function viewHome() {
+
     let $template = document.querySelector('#viewHome');
-    $viewer.innerHTML = $template.innerHTML;
+    $viewer.innerHTML = $template.innerHTML;    
+
+    let infos;
+    
+    fetch(API + '/usuario')
+    .then(r => r.json())
+    .then(infos)
+
+    let $informacoes = document.querySelector("#infoUsuario");
+
+    $informacoes.innerHTML = ''; 
+
+    let $p = document.createElement("p");
+    $informacoes.appendChild($p);
+    $p.innerText = "Nome: " + infos.nome + ", Sobrenome: " + infos.sobrenome + "E-mail: " + infos.email;
+
+    let $botaoAlterarInformacoes = document.querySelector("#alterarInfos");
+    let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
+
+    $botaoAlterarInformacoes.addEventListener('click', viewAlteracaoCadastro);
+    $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
+
 }
 
 function viewCadastroUsuario () {
@@ -161,4 +189,37 @@ function removeAcento (text) {
     text = text.replace(new RegExp('[ÚÙÛ]','gi'), 'u');
     text = text.replace(new RegExp('[Ç]','gi'), 'c');
     return text;
+}
+
+function viewPaginaCampanha() {
+
+  let $template = document.querySelector('#viewPaginaCampanha');
+  $viewer.innerHTML = $template.innerHTML;
+
+  let $textoDaBusca = document.querySelector("#textoParaBusca"); 
+
+  let $buscarPorCampanhas = document.querySelector("#procurarCampanhas");
+
+  $buscarPorCampanhas.addEventListener('click', buscarCampanhas($textoDaBusca.value));
+
+}
+
+function buscarCampanhas(textoDaBusca) {
+
+  let campanhas = [];
+
+//Ajustar esse método por completo para pegar as campanhas.
+
+  let campanhas = await fetch(baseURL + 'campanha', {
+    'method': 'GET',
+    'body': `{"textoDaBusca": "${textoDaBusca}"`,
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  });
+
+  return campanhas; 
+}
+
+function viewAlteracaoCadastro() {
+
 }
