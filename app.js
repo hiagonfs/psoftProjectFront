@@ -201,25 +201,32 @@ function viewPaginaCampanha() {
   let $template = document.querySelector('#viewPaginaCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
-  let $textoDaBusca = document.querySelector("#textoParaBusca");
+
 
   let $buscarPorCampanhas = document.querySelector("#procurarCampanhas");
 
-  $buscarPorCampanhas.addEventListener('click', buscarCampanhas($textoDaBusca.value));
+  $buscarPorCampanhas.addEventListener('click', buscarCampanhas);
 
 }
 
-async function buscarCampanhas(textoDaBusca) {
+async function buscarCampanhas() {
 //Ajustar esse método por completo para pegar as campanhas.
 
-  let campanhas = await fetch(baseURL + 'campanha', {
+  let textoDaBusca = document.querySelector("#textoParaBusca").value;
+
+  let resposta = await fetch(baseURL + 'campanha?nome=' + textoDaBusca, {
     'method': 'GET',
-    'body': `{"textoDaBusca": "${textoDaBusca}"`,
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
   });
 
-  return campanhas;
+  let json = await resposta.json();
+  console.log(json);
+  let resultado = document.getElementById("resultado");
+  if (resultado) {
+    console.log(resultado)
+      resultado.innerHTML = json;
+  }
 }
 
 function viewAlteracaoCadastro() {
