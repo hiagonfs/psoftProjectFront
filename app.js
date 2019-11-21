@@ -98,7 +98,9 @@ function viewCadastroUsuario () {
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoCadastrar = document.querySelector("#criar");
+  let $botaoVoltarLogin = document.querySelector("#voltarLogin");
   $botaoCadastrar.addEventListener('click', cadastrar_usuario);
+  $botaoVoltarLogin.addEventListener('click', viewLogin);
 }
 
 async function cadastrar_usuario() {
