@@ -78,7 +78,7 @@ async function viewHome() {
 
       let $h1 = document.createElement("h1");
       $informacoes.appendChild($h1);
-      $h1.innerText = json.nome + " " + json.sobrenome;
+      $h1.innerText = json.nome + " " + json.sobrenome + "!";
 
       let $botaoAlterarInformacoes = document.querySelector("#alterarInfos");
       let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
@@ -89,8 +89,6 @@ async function viewHome() {
     else {
       alert(json.message);
     }
-
-
 }
 
 function viewCadastroUsuario () {
@@ -171,7 +169,7 @@ function defineURLUnicaCampanha (nomeCurto) {
   console.log(URLCampanha);
 
   //1) todo caractere de pontuação será trocado por espaço
-  URLCampanha = URLCampanha.replace(/[.:,;!?(){}<>_-]/g, ' ');
+  URLCampanha = URLCampanha.replace(/['".:,;!?(){}<>_-]/g, ' ');
   console.log(URLCampanha);
   //2) todo caractere acentuado é trocado por equivalente sem acento
   URLCampanha = removeAcento(URLCampanha);
@@ -203,11 +201,11 @@ function viewPaginaCampanha() {
   let $template = document.querySelector('#viewPaginaCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
-
-
   let $buscarPorCampanhas = document.querySelector("#procurarCampanhas");
-
   $buscarPorCampanhas.addEventListener('click', buscarCampanhas);
+
+  let $botaoPaginaCadastrarCampanha = document.querySelector("#paginaCadastrarCampanha");
+  $botaoPaginaCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
 
 }
 
