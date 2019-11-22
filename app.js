@@ -34,12 +34,14 @@ function viewPrincipal() {
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoLogar = document.querySelector("#logar");
-  let $botaoCadastrar = document.querySelector("#cadastrar");
+  let $botaoIrCadastrarUsuario = document.querySelector("#irCadastrarUsuario");
+  let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
 
   let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
 
   $botaoLogar.addEventListener('click', viewLogin);
-  $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
+  $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
+  $botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
 
   $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
 
