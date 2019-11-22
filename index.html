@@ -21,8 +21,30 @@
         <p>Senha:
             <input id="senha" type="password">
         </p>
+
         <button id="logar">Login</button>
         <button id="cadastrar">Cadastro</button>
+
+        <h2>Top5 Campanhas</h2>
+
+        <form id="metodoOrdenacao">
+            <select name="metodoOrdenacao">
+                <option value="data" selected>Data
+                    <option value="quantia">Quantia
+                        <option value="likes">Likes
+            </select>
+        </form>
+
+        <div id="campanhasOrdenadas"></div>
+
+        <p>Buscar campanhas:
+            <input id="buscaCampanha" type="text">
+        </p>
+
+        <button id="buscarCampanhasSelecionadas">Pesquisar</button>
+
+        <div id="resultado"></div>
+
     </template>
 
     <template id="viewCadastroUsuario">

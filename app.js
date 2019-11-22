@@ -31,9 +31,13 @@ function viewLogin() {
 
     let $botaoLogar = document.querySelector("#logar");
     let $botaoCadastrar = document.querySelector("#cadastrar");
+    let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
 
     $botaoLogar.addEventListener('click', logar);
     $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
+    $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
+
+    let $selecaoTexto = document.querySelector("#metodoOrdenacao");
 }
 
 async function logar() {
@@ -228,6 +232,7 @@ async function buscarCampanhas() {
       resultado.innerHTML = json;
   }
 }
+  
 
 function viewAlteracaoCadastro() {
 
