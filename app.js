@@ -98,6 +98,8 @@ async function viewHome() {
     let json = await resposta.json();
 
     if (resposta.status == 200) {
+
+      // captura de informacoes do usuario e preenchimento da tela
       let $informacoes = document.querySelector("#infoUsuario");
       $informacoes.innerHTML = '';
 
@@ -105,11 +107,15 @@ async function viewHome() {
       $informacoes.appendChild($h1);
       $h1.innerText = json.nome + " " + json.sobrenome + "!";
 
-      let $botaoAlterarInformacoes = document.querySelector("#alterarInfos");
       let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
 
-      $botaoAlterarInformacoes.addEventListener('click', viewAlteracaoCadastro);
       $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
+
+      // preenchimento com informacoes da campanha
+
+      let $informacoesCampanha = document.querySelector("#infosCampanhas");
+
+    $informacoesCampanha.innerHTML = '';
     }
     else {
       alert(json.message);
