@@ -5,7 +5,10 @@ let $viewer = document.querySelector('#viewer');
 (async function main() {
     // roteamento
     let hash = location.hash;
-    if (["", "#viewLogin"].includes(hash)) {
+    if (["", "#principalPagina"].includes(hash)) {
+      viewPrincipal();
+    }
+    else if (["#viewLogin"].includes(hash)){
       viewLogin();
     }
     else if (["#viewCadastroUsuario"].includes(hash)){
@@ -25,22 +28,40 @@ let $viewer = document.querySelector('#viewer');
     }
   }());
 
+function viewPrincipal() {
+
+  let $template = document.querySelector('#principalPagina');
+  $viewer.innerHTML = $template.innerHTML;
+
+  let $botaoLogar = document.querySelector("#logar");
+  let $botaoCadastrar = document.querySelector("#cadastrar");
+
+  let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
+  
+  $botaoLogar.addEventListener('click', viewLogin);
+  $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
+
+  $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
+
+}
+
 function viewLogin() {
+
     let $template = document.querySelector('#viewLogin');
     $viewer.innerHTML = $template.innerHTML;
 
     let $botaoLogar = document.querySelector("#logar");
-    let $botaoCadastrar = document.querySelector("#cadastrar");
-    let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
 
+    let $botaoVoltarLogar = document.querySelector("#voltarLogar");
+    
     $botaoLogar.addEventListener('click', logar);
-    $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
-    $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
 
-    let $selecaoTexto = document.querySelector("#metodoOrdenacao");
+    $botaoVoltarLogar.addEventListener('click', viewPrincipal);
+  
 }
 
 async function logar() {
+
      let email = document.querySelector("#email").value;
      let senha = document.querySelector("#senha").value;
      let resposta = await fetch(baseURL + 'auth/login', {
@@ -231,9 +252,4 @@ async function buscarCampanhas() {
     console.log(resultado)
       resultado.innerHTML = json;
   }
-}
-  
-
-function viewAlteracaoCadastro() {
-
 }
