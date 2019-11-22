@@ -37,7 +37,7 @@ function viewPrincipal() {
   let $botaoCadastrar = document.querySelector("#cadastrar");
 
   let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
-  
+
   $botaoLogar.addEventListener('click', viewLogin);
   $botaoCadastrar.addEventListener('click', viewCadastroUsuario);
 
@@ -53,11 +53,11 @@ function viewLogin() {
     let $botaoLogar = document.querySelector("#logar");
 
     let $botaoVoltarLogar = document.querySelector("#voltarLogar");
-    
+
     $botaoLogar.addEventListener('click', logar);
 
     $botaoVoltarLogar.addEventListener('click', viewPrincipal);
-  
+
 }
 
 async function logar() {
@@ -150,7 +150,8 @@ async function cadastrar_usuario() {
   let json = await resposta.json();
 
   if (resposta.status == 201) {
-    viewHome();
+    location.hash = 'viewLogin';
+    viewLogin();
   }
   else {
     alert(json.message);
