@@ -350,7 +350,25 @@ function paginaCampanhaIndividual(campanha) {
   $informacoesDaCampanha.appendChild($h1);
   $h1.innerText = "Nome da Campanha: " + campanha.nome + "\n" +
   "Descrição: " + campanha.descricao + "\n" +
+  "O id da Campanha para fins de teste: " + campanha.id + "\n" +
   "A meta da Campanha é: "+ campanha.meta + "\n" +
   "O dono da campanha: " + campanha.dono.email; 
+
+  let $h2 = document.createElement("h2");
+  $informacoesDaCampanha.appendChild($h2);
+
+  $h2.innerText = "O que já disseram sobre essa campanha?" + "\n" +
+  "========"  + "\n" +
+  campanha.comentarios  + "\n" +
+  "========"; 
+
+  let $botaoDeRetorno = document.querySelector("#voltarParaBuscaDeCampanha");
+  $botaoDeRetorno.addEventListener('click', viewPaginaCampanha);
+
+  let $botaoDeComentario = document.querySelector("#voltarParaBuscaDeCampanha");
+  $botaoDeComentario.addEventListener('click', comentar(campanha));
+  
+  let $botaoDeCurtida = document.querySelector("#voltarParaBuscaDeCampanha");
+  $botaoDeCurtida.addEventListener('click', curtir(campanha));
 
 }
