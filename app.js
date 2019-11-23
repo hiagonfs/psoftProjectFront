@@ -295,6 +295,12 @@ async function buscarCampanhas() {
   $resultado.innerHTML = '';
 
   json.forEach((e, i) => {
+
+    let $a = document.createElement("a");
+    $a.href = baseURL + "campanha/" + json[i].nomeCurto;
+    $a.innerText = json[i].nome;
+    $resultado.appendChild($a);
+    
     let $p = document.createElement("p");
     $resultado.appendChild($p);
     // botao de comentario
@@ -305,6 +311,7 @@ async function buscarCampanhas() {
     let $botaoCurtir = document.createElement("button");
     $botaoCurtir.innerHTML = 'Curtir';
     $resultado.appendChild($botaoCurtir);
+
     $p.innerText = "=====================================================================" + "\n" +
     "Nome: " + json[i].nome + "\n" +
     "Descricao: " + json[i].descricao + "\n" +

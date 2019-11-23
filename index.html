@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="module" src="app.js"></script>
+    <link rel="stylesheet" href="style.css">
     <title>AJudE</title>
 </head>
 
@@ -32,27 +33,35 @@
 
         <button id="logar">Login</button>
         <button id="irCadastrarUsuario">Cadastrar Usuário</button>
-
-        <h2>Top 5 Campanhas Recentes:</h2>
-
         <button id="irCadastrarCampanha">Cadastrar Campanha</button>
-        <form id="metodoOrdenacao">
-            <select name="metodoOrdenacao">
-                <option value="data" selected>Data
-                    <option value="quantia">Quantia
-                        <option value="likes">Likes
-            </select>
-        </form>
 
-        <div id="campanhasOrdenadas"></div>
+        <h2>Buscar Campanhas</h2>
 
-        <p>Buscar campanhas:
+        <div id="ferramentasBusca">
+          <div class="lado">
             <input id="buscaCampanha" type="text">
-        </p>
+          </div>
+          <div class="lado menor">
+            <form id="metodoOrdenacao">
+                <select name="metodoOrdenacao">
+                    <option value="data" selected>Data
+                        <option value="quantia">Quantia
+                            <option value="likes">Likes
+                </select>
+            </form>
+          </div>
+          <div class="lado menor direita">
+            <button id="buscarCampanhasSelecionadas">Pesquisar</button>
+          </div>
+        </div>
 
-        <button id="buscarCampanhasSelecionadas">Pesquisar</button>
+        <div class="todo">
+          <h2>Top 5 Campanhas Recentes:</h2>
+        </div>
+          <div id="campanhasOrdenadas"></div>
+          <div id="resultado"></div>
 
-        <div id="resultado"></div>
+
 
     </template>
 
@@ -105,7 +114,7 @@
     </template>
 
     <template id="viewCadastraCampanha">
-        <h1>Página para cadastro de Campanhas!</h1>
+        <h1>Cadastro de Campanha</h1>
         <p>nome:
             <input id="nome" type="text">
         </p>
@@ -120,6 +129,25 @@
         </p>
         <button id="voltarDoCadastroCampanha">Voltar</button>
         <button id="cadastrarCampanha">Cadastrar</button>
+    </template>
+
+    <template id="viewAcessoCampanha">
+      <h1>Campanha:</h1>
+      <div id="infoCampanha"></div>
+      <p>nome:
+          <input id="nome" type="text">
+      </p>
+      <p>Descricao:
+          <input id="descricao" type="text">
+      </p>
+      <p>Deadline:
+          <input id="deadline" type="date">
+      </p>
+      <p>Meta:
+          <input id="meta" type="text">
+      </p>
+      <button id="voltarDoAcessoCampanha">Voltar</button>
+      <button id="atualizarCampanha">Cadastrar</button>
     </template>
 
 </body>
