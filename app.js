@@ -1,7 +1,7 @@
 let username;
 const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
-let URL_BASE = ''; 
+let URL_BASE = '';
 
 window.onhashchange = function () { URL_BASE + location.hash}
 
@@ -33,7 +33,7 @@ window.onhashchange = function () { URL_BASE + location.hash}
 
 function viewPrincipal() {
 
-  location.hash = ''; 
+  location.hash = '';
 
   let $template = document.querySelector('#principalPagina');
   $viewer.innerHTML = $template.innerHTML;
@@ -60,12 +60,10 @@ function viewLogin() {
     $viewer.innerHTML = $template.innerHTML;
 
     let $botaoLogar = document.querySelector("#logar");
-
-    let $botaoVoltarLogar = document.querySelector("#voltarLogar");
-
     $botaoLogar.addEventListener('click', logar);
 
-    $botaoVoltarLogar.addEventListener('click', viewPrincipal);
+    let $botaoVoltarDoLogin = document.querySelector("#voltarDoLogin");
+    $botaoVoltarDoLogin.addEventListener('click', viewPrincipal);
 
 }
 
@@ -95,7 +93,7 @@ async function logar() {
 
 async function viewHome() {
 
-  location.hash = 'home'; 
+  location.hash = 'home';
 
     let $template = document.querySelector('#viewHome');
     $viewer.innerHTML = $template.innerHTML;
@@ -141,16 +139,16 @@ async function viewHome() {
 
 function viewCadastroUsuario () {
 
-  location.hash = 'cadastraUsuario'; 
+  location.hash = 'cadastraUsuario';
 
   let $template = document.querySelector('#viewCadastroUsuario');
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoCadastrar = document.querySelector("#criar");
-  let $botaoVoltarLogin = document.querySelector("#voltarPrincipalPagina");
-  
   $botaoCadastrar.addEventListener('click', cadastrar_usuario);
-  $botaoVoltarLogin.addEventListener('click', viewPrincipal);
+
+  let $botaoVoltarDoCadastroUsuario = document.querySelector("#botaoVoltarDoCadastroUsuario");
+  $botaoVoltarDoCadastroUsuario.addEventListener('click', viewPrincipal);
 }
 
 async function cadastrar_usuario() {
@@ -181,7 +179,7 @@ async function cadastrar_usuario() {
 
 function viewCadastraCampanha() {
 
-  location.hash = 'cadastroCampanha'; 
+  location.hash = 'cadastroCampanha';
 
   let $template = document.querySelector('#viewCadastraCampanha');
   $viewer.innerHTML = $template.innerHTML;
@@ -189,8 +187,8 @@ function viewCadastraCampanha() {
   let $botaoCadastrarCampanha = document.querySelector("#cadastrarCampanha");
   $botaoCadastrarCampanha.addEventListener('click', cadastrar_campanha);
 
-  let $botaoVoltarDaCampanha = document.querySelector("#voltarPrincipalPagina");
-  $botaoVoltarDaCampanha.addEventListener('click', viewHome);
+  let $botaoVoltarDaCampanha = document.querySelector("#voltarDoCadastroCampanha");
+  $botaoVoltarDaCampanha.addEventListener('click', viewPrincipal);
 
 }
 
@@ -258,7 +256,7 @@ function removeAcento (text) {
 
 function viewPaginaCampanha() {
 
-  location.hash = 'campanha'; 
+  location.hash = 'campanha';
 
   let $template = document.querySelector('#viewPaginaCampanha');
   $viewer.innerHTML = $template.innerHTML;
@@ -288,7 +286,7 @@ async function buscarCampanhas() {
   let json = await resposta.json();
   console.log(json);
   let $resultado = document.getElementById("resultado");
- 
+
   //if (resultado) {
     //console.log(resultado)
     //resultado.innerHTML = json;
@@ -301,13 +299,13 @@ async function buscarCampanhas() {
     $resultado.appendChild($p);
     // botao de comentario
     let $botaoComentar = document.createElement("button");
-    $botaoComentar.innerHTML = 'Comentar'; 
+    $botaoComentar.innerHTML = 'Comentar';
     $resultado.appendChild($botaoComentar);
     // botao de curtida
     let $botaoCurtir = document.createElement("button");
-    $botaoCurtir.innerHTML = 'Curtir'; 
+    $botaoCurtir.innerHTML = 'Curtir';
     $resultado.appendChild($botaoCurtir);
-    $p.innerText = "=====================================================================" + "\n" + 
+    $p.innerText = "=====================================================================" + "\n" +
     "Nome: " + json[i].nome + "\n" +
     "Descricao: " + json[i].descricao + "\n" +
     "Dono: " + json[i].dono.email + "\n" +
