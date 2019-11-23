@@ -286,6 +286,7 @@ async function buscarCampanhas() {
   let json = await resposta.json();
   console.log(json);
   let $resultado = document.getElementById("resultado");
+ 
   //if (resultado) {
     //console.log(resultado)
     //resultado.innerHTML = json;
@@ -293,11 +294,23 @@ async function buscarCampanhas() {
 
   $resultado.innerHTML = '';
 
-  let $p = document.createElement("p");
-  $resultado.appendChild($p);
-  $p.innerText = "Nome: " + json.nome + "\n" +
-       "Descricao: " + json.descricao + "\n" +
-       "Meta: "+ json.meta;
-  let $botaoCampanha = document.createElement("button");
-  $resultado.appendChild($botaoCampanha); 
+  json.forEach((e, i) => {
+    let $p = document.createElement("p");
+    $resultado.appendChild($p);
+    // botao de comentario
+    let $botaoComentar = document.createElement("button");
+    $botaoComentar.innerHTML = 'Comentar'; 
+    $resultado.appendChild($botaoComentar);
+    // botao de curtida
+    let $botaoCurtir = document.createElement("button");
+    $botaoCurtir.innerHTML = 'Curtir'; 
+    $resultado.appendChild($botaoCurtir);
+    $p.innerText = "=====================================================================" + "\n" + 
+    "Nome: " + json[i].nome + "\n" +
+    "Descricao: " + json[i].descricao + "\n" +
+    "Dono: " + json[i].dono.email + "\n" +
+    "Meta:" + json[i].meta + "\n" +
+    "=====================================================================";
+  });
+
 }
