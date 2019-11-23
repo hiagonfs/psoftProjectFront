@@ -1,6 +1,9 @@
 let username;
 const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
+let URL_BASE = 'http://www.ajude.com/'
+
+window.onhashchange = function () {URL_BASE + location.hash)}
 
 (async function main() {
     // roteamento
@@ -30,6 +33,8 @@ let $viewer = document.querySelector('#viewer');
 
 function viewPrincipal() {
 
+  location.hash = 'home'; 
+
   let $template = document.querySelector('#principalPagina');
   $viewer.innerHTML = $template.innerHTML;
 
@@ -46,6 +51,8 @@ function viewPrincipal() {
 }
 
 function viewLogin() {
+
+    location.hash = 'login';
 
     let $template = document.querySelector('#viewLogin');
     $viewer.innerHTML = $template.innerHTML;
