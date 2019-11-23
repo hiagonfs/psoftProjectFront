@@ -275,7 +275,7 @@ function viewPaginaCampanha() {
 async function buscarCampanhas() {
 //Ajustar esse método por completo para pegar as campanhas.
 
-  let textoDaBusca = document.querySelector("#textoParaBusca").value;
+  let textoDaBusca = document.querySelector("#buscaCampanha").value;
 
   let resposta = await fetch(baseURL + 'campanha?nome=' + textoDaBusca, {
     'method': 'GET',
