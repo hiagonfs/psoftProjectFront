@@ -1,9 +1,9 @@
 let username;
 const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
-let URL_BASE = 'http://www.ajude.com/'
+let URL_BASE = ''; 
 
-window.onhashchange = function () {URL_BASE + location.hash)}
+window.onhashchange = function () { URL_BASE + location.hash}
 
 (async function main() {
     // roteamento
@@ -33,7 +33,7 @@ window.onhashchange = function () {URL_BASE + location.hash)}
 
 function viewPrincipal() {
 
-  location.hash = 'home'; 
+  location.hash = ''; 
 
   let $template = document.querySelector('#principalPagina');
   $viewer.innerHTML = $template.innerHTML;
@@ -93,6 +93,8 @@ async function logar() {
 
 async function viewHome() {
 
+  location.hash = 'home'; 
+
     let $template = document.querySelector('#viewHome');
     $viewer.innerHTML = $template.innerHTML;
 
@@ -112,11 +114,17 @@ async function viewHome() {
 
       let $h1 = document.createElement("h1");
       $informacoes.appendChild($h1);
-      $h1.innerText = json.nome + " " + json.sobrenome + "!";
+      $h1.innerText = "Nome: " + json.nome + "\n" +
+       "Sobrenome: " + json.sobrenome + "\n" +
+       "E-mail: "+ json.email;
 
       let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
 
       $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
+
+      let $botaoParaSairDoSistema = document.querySelector("#sairDoSistema");
+
+      $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
 
       // preenchimento com informacoes da campanha
 
@@ -130,13 +138,17 @@ async function viewHome() {
 }
 
 function viewCadastroUsuario () {
+
+  location.hash = 'cadastraUsuario'; 
+
   let $template = document.querySelector('#viewCadastroUsuario');
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoCadastrar = document.querySelector("#criar");
-  let $botaoVoltarLogin = document.querySelector("#voltarLogin");
+  let $botaoVoltarLogin = document.querySelector("#voltarPrincipalPagina");
+  
   $botaoCadastrar.addEventListener('click', cadastrar_usuario);
-  $botaoVoltarLogin.addEventListener('click', viewLogin);
+  $botaoVoltarLogin.addEventListener('click', viewPrincipal);
 }
 
 async function cadastrar_usuario() {
@@ -166,11 +178,18 @@ async function cadastrar_usuario() {
 }
 
 function viewCadastraCampanha() {
+
+  location.hash = 'cadastroCampanha'; 
+
   let $template = document.querySelector('#viewCadastraCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoCadastrarCampanha = document.querySelector("#cadastrarCampanha");
   $botaoCadastrarCampanha.addEventListener('click', cadastrar_campanha);
+
+  let $botaoVoltarDaCampanha = document.querySelector("#voltarPrincipalPagina");
+  $botaoVoltarDaCampanha.addEventListener('click', viewHome);
+
 }
 
 async function cadastrar_campanha() {
@@ -237,6 +256,8 @@ function removeAcento (text) {
 
 function viewPaginaCampanha() {
 
+  location.hash = 'campanha'; 
+
   let $template = document.querySelector('#viewPaginaCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
@@ -245,6 +266,9 @@ function viewPaginaCampanha() {
 
   let $botaoPaginaCadastrarCampanha = document.querySelector("#paginaCadastrarCampanha");
   $botaoPaginaCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
+
+  let $botaoVoltarParaPrincipalTela = document.querySelector("#voltandoParaAPrincipal");
+  $botaoVoltarParaPrincipalTela.addEventListener('click', viewHome);
 
 }
 
@@ -261,9 +285,19 @@ async function buscarCampanhas() {
 
   let json = await resposta.json();
   console.log(json);
-  let resultado = document.getElementById("resultado");
-  if (resultado) {
-    console.log(resultado)
-      resultado.innerHTML = json;
-  }
+  let $resultado = document.getElementById("resultado");
+  //if (resultado) {
+    //console.log(resultado)
+    //resultado.innerHTML = json;
+ // }
+
+  $resultado.innerHTML = '';
+
+  let $p = document.createElement("p");
+  $resultado.appendChild($p);
+  $p.innerText = "Nome: " + json.nome + "\n" +
+       "Descricao: " + json.descricao + "\n" +
+       "Meta: "+ json.meta;
+  let $botaoCampanha = document.createElement("button");
+  $resultado.appendChild($botaoCampanha); 
 }
