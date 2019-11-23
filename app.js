@@ -3,37 +3,42 @@ const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 
-window.onhashchange = function () { URL_BASE + location.hash}
-
 (async function main() {
-    // roteamento
-    let hash = location.hash;
-    if (["", "#principalPagina"].includes(hash)) {
-      viewPrincipal();
-    }
-    else if (["#viewLogin"].includes(hash)){
-      viewLogin();
-    }
-    else if (["#viewCadastroUsuario"].includes(hash)){
-        viewCadastroUsuario();
-    }
-    else if (["#viewHome"].includes(hash)) {
-      viewHome();
-    }
-    else if (["#viewPaginaCampanha"].includes(hash)) {
-      viewPaginaCampanha();
-    }
-    else if (["#viewAlteracaoCadastro"].includes(hash)) {
-      viewAlteracaoCadastro();
-    }
-    else if(["viewCadastraCampanha"].includes(hash)) {
-        viewCadastraCampanha();
-    }
-  }());
+  // roteamento
+  let hash = location.hash;
+  if (["", "#principalPagina"].includes(hash)) {
+    viewPrincipal();
+  }
+  
+}());
+
+window.onhashchange = function () { 
+
+  let hash = window.location.hash;
+
+  if (["#login"].includes(hash)){
+    viewLogin();
+  }
+  else if (["#cadastraUsuario"].includes(hash)){
+      viewCadastroUsuario();
+  }
+  else if (["#home"].includes(hash)) {
+    viewHome();
+  }
+  else if (["#campanha"].includes(hash)) {
+    viewPaginaCampanha();
+  }
+  else if(["cadastraCampanha"].includes(hash)) {
+      viewCadastraCampanha();
+  }
+ 
+  URL_BASE + location.hash 
+
+}
 
 function viewPrincipal() {
 
-  location.hash = '';
+  window.location.hash = '';
 
   let $template = document.querySelector('#principalPagina');
   $viewer.innerHTML = $template.innerHTML;
@@ -54,7 +59,7 @@ function viewPrincipal() {
 
 function viewLogin() {
 
-    location.hash = 'login';
+  window.location.hash = 'login';
 
     let $template = document.querySelector('#viewLogin');
     $viewer.innerHTML = $template.innerHTML;
@@ -93,7 +98,7 @@ async function logar() {
 
 async function viewHome() {
 
-  location.hash = 'home';
+  window.location.hash = 'home';
 
     let $template = document.querySelector('#viewHome');
     $viewer.innerHTML = $template.innerHTML;
@@ -139,7 +144,7 @@ async function viewHome() {
 
 function viewCadastroUsuario () {
 
-  location.hash = 'cadastraUsuario';
+  window.location.hash = 'cadastraUsuario';
 
   let $template = document.querySelector('#viewCadastroUsuario');
   $viewer.innerHTML = $template.innerHTML;
@@ -169,7 +174,7 @@ async function cadastrar_usuario() {
   let json = await resposta.json();
 
   if (resposta.status == 201) {
-    location.hash = 'viewLogin';
+    window.location.hash = 'viewLogin';
     viewLogin();
   }
   else {
@@ -179,7 +184,7 @@ async function cadastrar_usuario() {
 
 function viewCadastraCampanha() {
 
-  location.hash = 'cadastroCampanha';
+  window.location.hash = 'cadastroCampanha';
 
   let $template = document.querySelector('#viewCadastraCampanha');
   $viewer.innerHTML = $template.innerHTML;
@@ -193,18 +198,19 @@ function viewCadastraCampanha() {
 }
 
 async function cadastrar_campanha() {
+
   let nome = document.querySelector("#nome").value;
   let descricao = document.querySelector("#descricao").value;
   let deadline = document.querySelector("#deadline").value;
   let meta = document.querySelector("#meta").value;
 
-  let URLCampanha = defineURLUnicaCampanha(nome);
-  console.log(URLCampanha);
+  let transformaNomeCampanha = defineURLUnicaCampanha(nome);
+  console.log("aqui esta o nome curto da campanha:" + transformaNomeCampanha);
 
   let resposta = await fetch(baseURL + 'campanha', {
     'method': 'POST',
     'body': `{"nome": "${nome}",
-              "nomeCurto": "${URLCampanha}",
+              "nomeCurto": "${transformaNomeCampanha}",
               "descricao": "${descricao}",
               "deadline": "${deadline}",
               "meta": "${meta}"}`,
@@ -216,6 +222,8 @@ async function cadastrar_campanha() {
 
   if (resposta.status == 201) {
     console.log('Pronto! Campanha criada com sucesso!');
+    window.location.hash = defineURLUnicaCampanha;
+    viewPaginaCampanha();  
   }
   else {
     alert(json.message);
@@ -223,6 +231,7 @@ async function cadastrar_campanha() {
 }
 
 function defineURLUnicaCampanha (nomeCurto) {
+
   let URLCampanha = nomeCurto;
   console.log(URLCampanha);
 
@@ -241,7 +250,7 @@ function defineURLUnicaCampanha (nomeCurto) {
   //5) todo espaço será trocado por um hífen ("-")
   URLCampanha = URLCampanha.replace(/ /g, "-");
 
-  return URLCampanha;
+  return new String(URLCampanha);
 }
 
 function removeAcento (text) {
@@ -256,7 +265,7 @@ function removeAcento (text) {
 
 function viewPaginaCampanha() {
 
-  location.hash = 'campanha';
+  window.location.hash = 'campanha';
 
   let $template = document.querySelector('#viewPaginaCampanha');
   $viewer.innerHTML = $template.innerHTML;
@@ -294,30 +303,54 @@ async function buscarCampanhas() {
 
   $resultado.innerHTML = '';
 
+  let campanhas = []; 
+
   json.forEach((e, i) => {
 
-    let $a = document.createElement("a");
-    $a.href = baseURL + "campanha/" + json[i].nomeCurto;
-    $a.innerText = json[i].nome;
-    $resultado.appendChild($a);
-    
-    let $p = document.createElement("p");
-    $resultado.appendChild($p);
-    // botao de comentario
-    let $botaoComentar = document.createElement("button");
-    $botaoComentar.innerHTML = 'Comentar';
-    $resultado.appendChild($botaoComentar);
-    // botao de curtida
-    let $botaoCurtir = document.createElement("button");
-    $botaoCurtir.innerHTML = 'Curtir';
-    $resultado.appendChild($botaoCurtir);
+   campanhas.push(json[i]);  
 
-    $p.innerText = "=====================================================================" + "\n" +
+    let $pCampanha = document.createElement("p");  
+    $resultado.appendChild($pCampanha); 
+
+    $pCampanha.innerText = "=====================================================================" + "\n" +
     "Nome: " + json[i].nome + "\n" +
     "Descricao: " + json[i].descricao + "\n" +
     "Dono: " + json[i].dono.email + "\n" +
+    "Nome Curto: " + json[i].nomeCurto + "\n" +
     "Meta:" + json[i].meta + "\n" +
     "=====================================================================";
+
+    let $botaoCamp = document.createElement("button");
+    $botaoCamp.innerHTML = 'Selecionar esta campanha';
+    $resultado.appendChild($botaoCamp); 
+    $botaoCamp.id = i; 
+
   });
+
+  var quemFoiClicado = document.getElementById("resultado");
+  quemFoiClicado.addEventListener("click", function(event) {
+    let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
+    let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;  
+    $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual(campanhas[numeroCampanha]));
+  })
+
+}
+
+function paginaCampanhaIndividual(campanha) { 
+
+  window.location.hash = 'campanha/' + campanha.nomeCurto;
+
+  let $template = document.querySelector('#viewCampanhaIndividual');
+  $viewer.innerHTML = $template.innerHTML;
+
+  let $informacoesDaCampanha = document.querySelector("#infosCampanha");
+  $informacoesDaCampanha.innerHTML = '';
+
+  let $h1 = document.createElement("h1");
+  $informacoesDaCampanha.appendChild($h1);
+  $h1.innerText = "Nome da Campanha: " + campanha.nome + "\n" +
+  "Descrição: " + campanha.descricao + "\n" +
+  "A meta da Campanha é: "+ campanha.meta + "\n" +
+  "O dono da campanha: " + campanha.dono.email; 
 
 }
