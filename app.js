@@ -333,33 +333,53 @@ async function buscarCampanhas() {
 
 }
 
-async function buscaQuantoFaltaMeta(idCampanha) {
-  let resposta = await fetch(baseURL + 'campanha/' + idCampanha + '/quantoFalta', {
+async function buscaQuantoFaltaMeta(id) {
+  
+  let resposta = await fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json'}
   });
+
   let json = await resposta.json();
   return json;
 }
 
-function paginaCampanhaIndividual(campanha) {
+function paginaCampanhaIndividual() {
 
-  window.location.hash = 'campanha/' + campanha.nomeCurto + '/atualiza';
+  window.location.hash = 'campanha/' + campanhaSelecionada.nomeCurto;
 
-  let $template = document.querySelector('#viewAcessoCampanha');
+  let $template = document.querySelector('#viewCampanhaIndividual');
   $viewer.innerHTML = $template.innerHTML;
 
-  let nome = document.querySelector("#nome");
-  nome.value = campanha.nome;
-  let descricao = document.querySelector("#descricao");
-  descricao.value = campanha.descricao;
-  let deadline = document.querySelector("#deadline");
-  deadline.value = campanha.deadline;
-  let meta = document.querySelector("#meta");
-  meta.value = campanha.meta;
+  let $informacoesDaCampanha = document.querySelector("#infosCampanha");
+  $informacoesDaCampanha.innerHTML = '';
 
-  let $botaoDeRetorno = document.querySelector("#voltarDoAcessoCampanha");
-  $botaoDeRetorno.addEventListener('click', viewHome);
+  let $h1 = document.createElement("h1");
+  $informacoesDaCampanha.appendChild($h1);
+  $h1.innerText = "Nome da Campanha: " + campanhaSelecionada.nome + "\n" +
+  "Descrição: " + campanhaSelecionada.descricao + "\n" +
+  "O id da Campanha para fins de teste: " + campanhaSelecionada.id + "\n" +
+  "A meta da Campanha é: "+ campanhaSelecionada.meta + "\n" +
+  "Ainda falta para atingir a meta: " + buscaQuantoFaltaMeta(campanhaSelecionada.id) + "\n" +
+  "O dono da campanha: " + campanhaSelecionada.dono.email; 
+
+  let $h2 = document.createElement("h2");
+  $informacoesDaCampanha.appendChild($h2);
+
+  $h2.innerText = "O que já disseram sobre essa campanha?" + "\n" +
+  "========"  + "\n" +
+  campanhaSelecionada.comentarios  + "\n" +
+  "========"; 
+
+  let $botaoDeRetorno = document.querySelector("#voltarParaBuscaDeCampanha");
+  $botaoDeRetorno.addEventListener('click', viewPaginaCampanha);
+
+  let $botaoDeComentario = document.querySelector("#comentarioCampanha");
+  $botaoDeComentario.addEventListener('click', comentar);
+
+  let $botaoDeCurtida = document.querySelector("#curtidaCampanha");
+  $botaoDeCurtida.addEventListener('click', curtir);
+
 }
 
 function curtir() {
@@ -374,24 +394,24 @@ function comentar() {
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoVoltarParaPaginaCampanha = document.querySelector('#voltarParaPaginaDaCampanha');
-  $botaoVoltarParaPaginaCampanha.addEventListener('click', viewPaginaCampanha);
+  $botaoVoltarParaPaginaCampanha.addEventListener('click', paginaCampanhaIndividual);
 
-  let comentarioCapturado = document.querySelector("#textoComentario");
+  let comentarioCapturado = document.querySelector("#textoComentario").value;
 
   let $botaoEnviarComentario = document.querySelector('#comentarCampanha');
-  $botaoEnviarComentario.addEventListener('click', enviaComentario(comentarioCapturado.value));
+  $botaoEnviarComentario.addEventListener('click', enviaComentario(comentarioCapturado));
 
 }
 
 async function enviaComentario(texto) {
 
-  let resposta = await fetch(baseURL + 'comentario', {
+  let resposta = await fetch(baseURL + 'comentario/' + campanhaSelecionada.id, {
     'method': 'POST',
     'body': `{"texto": "${texto}",
-    "campanha": "${campanhaSelecionada}"`,
+              "idCampanha: "${campanhaSelecionada.id}`,
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
-  });
+  })
 
  let json = await resposta.json();
 
