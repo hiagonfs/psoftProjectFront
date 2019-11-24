@@ -282,7 +282,6 @@ function viewPaginaCampanha() {
 }
 
 async function buscarCampanhas() {
-//Ajustar esse método por completo para pegar as campanhas.
 
   let textoDaBusca = document.querySelector("#buscaCampanha").value;
 
@@ -294,20 +293,15 @@ async function buscarCampanhas() {
 
   let json = await resposta.json();
   console.log(json);
+
   let $resultado = document.getElementById("resultado");
-
-  //if (resultado) {
-    //console.log(resultado)
-    //resultado.innerHTML = json;
- // }
-
   $resultado.innerHTML = '';
 
   let campanhas = [];
 
   json.forEach((e, i) => {
 
-   campanhas.push(json[i]);
+    campanhas.push(json[i]);
 
     let $pCampanha = document.createElement("p");
     $resultado.appendChild($pCampanha);
@@ -317,7 +311,7 @@ async function buscarCampanhas() {
     "Descricao: " + json[i].descricao + "\n" +
     "Dono: " + json[i].dono.email + "\n" +
     "Nome Curto: " + json[i].nomeCurto + "\n" +
-    "Meta:" + json[i].meta + "\n" +
+    "Quanto falta: R$" + buscaQuantoFaltaMeta(json[i].id) + "\n" +
     "=====================================================================";
 
     let $botaoCamp = document.createElement("button");
@@ -334,6 +328,15 @@ async function buscarCampanhas() {
     $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual(campanhas[numeroCampanha]));
   })
 
+}
+
+async function buscaQuantoFaltaMeta(idCampanha) {
+  let resposta = await fetch(baseURL + 'campanha/' + idCampanha + '/quantoFalta', {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json'}
+  });
+  let json = await resposta.json();
+  return json;
 }
 
 function paginaCampanhaIndividual(campanha) {
