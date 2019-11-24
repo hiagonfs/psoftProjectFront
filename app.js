@@ -9,10 +9,10 @@ let URL_BASE = '';
   if (["", "#principalPagina"].includes(hash)) {
     viewPrincipal();
   }
-  
+
 }());
 
-window.onhashchange = function () { 
+window.onhashchange = function () {
 
   let hash = window.location.hash;
 
@@ -31,8 +31,8 @@ window.onhashchange = function () {
   else if(["cadastraCampanha"].includes(hash)) {
       viewCadastraCampanha();
   }
- 
-  URL_BASE + location.hash 
+
+  URL_BASE + location.hash
 
 }
 
@@ -223,7 +223,7 @@ async function cadastrar_campanha() {
   if (resposta.status == 201) {
     console.log('Pronto! Campanha criada com sucesso!');
     window.location.hash = defineURLUnicaCampanha;
-    viewPaginaCampanha();  
+    viewPaginaCampanha();
   }
   else {
     alert(json.message);
@@ -303,14 +303,14 @@ async function buscarCampanhas() {
 
   $resultado.innerHTML = '';
 
-  let campanhas = []; 
+  let campanhas = [];
 
   json.forEach((e, i) => {
 
-   campanhas.push(json[i]);  
+   campanhas.push(json[i]);
 
-    let $pCampanha = document.createElement("p");  
-    $resultado.appendChild($pCampanha); 
+    let $pCampanha = document.createElement("p");
+    $resultado.appendChild($pCampanha);
 
     $pCampanha.innerText = "=====================================================================" + "\n" +
     "Nome: " + json[i].nome + "\n" +
@@ -322,53 +322,54 @@ async function buscarCampanhas() {
 
     let $botaoCamp = document.createElement("button");
     $botaoCamp.innerHTML = 'Selecionar esta campanha';
-    $resultado.appendChild($botaoCamp); 
-    $botaoCamp.id = i; 
+    $resultado.appendChild($botaoCamp);
+    $botaoCamp.id = i;
 
   });
 
   var quemFoiClicado = document.getElementById("resultado");
   quemFoiClicado.addEventListener("click", function(event) {
     let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
-    let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;  
+    let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
     $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual(campanhas[numeroCampanha]));
   })
 
 }
 
-function paginaCampanhaIndividual(campanha) { 
+function paginaCampanhaIndividual(campanha) {
 
   window.location.hash = 'campanha/' + campanha.nomeCurto;
 
-  let $template = document.querySelector('#viewCampanhaIndividual');
+  let $template = document.querySelector('#viewAcessoCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
-  let $informacoesDaCampanha = document.querySelector("#infosCampanha");
-  $informacoesDaCampanha.innerHTML = '';
+  let nome = document.querySelector("#nome");
+  nome.value = campanha.nome;
+  let descricao = document.querySelector("#descricao");
+  descricao.value = campanha.descricao;
+  let deadline = document.querySelector("#deadline");
+  deadline.value = campanha.deadline;
+  let meta = document.querySelector("#meta");
+  meta.value = campanha.meta;
 
-  let $h1 = document.createElement("h1");
-  $informacoesDaCampanha.appendChild($h1);
-  $h1.innerText = "Nome da Campanha: " + campanha.nome + "\n" +
-  "Descrição: " + campanha.descricao + "\n" +
-  "O id da Campanha para fins de teste: " + campanha.id + "\n" +
-  "A meta da Campanha é: "+ campanha.meta + "\n" +
-  "O dono da campanha: " + campanha.dono.email; 
+  let $botaoDeRetorno = document.querySelector("#voltarDoAcessoCampanha");
+  $botaoDeRetorno.addEventListener('click', viewPrincipal);
 
-  let $h2 = document.createElement("h2");
-  $informacoesDaCampanha.appendChild($h2);
-
-  $h2.innerText = "O que já disseram sobre essa campanha?" + "\n" +
-  "========"  + "\n" +
-  campanha.comentarios  + "\n" +
-  "========"; 
-
-  let $botaoDeRetorno = document.querySelector("#voltarParaBuscaDeCampanha");
-  $botaoDeRetorno.addEventListener('click', viewPaginaCampanha);
-
-  let $botaoDeComentario = document.querySelector("#voltarParaBuscaDeCampanha");
-  $botaoDeComentario.addEventListener('click', comentar(campanha));
-  
-  let $botaoDeCurtida = document.querySelector("#voltarParaBuscaDeCampanha");
+  let $botaoDeCurtida = document.querySelector("#curtidaCampanha");
   $botaoDeCurtida.addEventListener('click', curtir(campanha));
 
+  let $botaoDeComentario = document.querySelector("#comentarioCampanha");
+  $botaoDeComentario.addEventListener('click', comentar(campanha));
+
+  let $botaoDeAtualizar = document.querySelector("#atualizarCampanha");
+  $botaoDeAtualizar.addEventListener('click', atualizar(campanha));
+
+  let quantCurtidas = document.querySelector("#quantCurtidas");
+  quantCurtidas.innerText = 5;
 }
+
+function curtir(campanha) {}
+
+function comentar(campanha) {}
+
+function atualizar(campanha) {}

@@ -115,7 +115,7 @@
 
     <template id="viewCampanhaIndividual">
 
-        <h1>Informações sobre a campanha!</h1>
+        <h1>Campanha:</h1>
         <div id="infosCampanha"></div>
 
         <button id="voltarParaBuscaDeCampanha">Voltar</button>
@@ -143,7 +143,7 @@
     </template>
 
     <template id="viewAcessoCampanha">
-      <h1>Campanha:</h1>
+      <h1>Campanha Selecionada:</h1>
       <div id="infoCampanha"></div>
       <p>nome:
           <input id="nome" type="text">
@@ -157,8 +157,24 @@
       <p>Meta:
           <input id="meta" type="text">
       </p>
+      <p>Status:
+      <form id="status">
+          <select name="Status">
+              <option value="ATIVA" selected>ATIVA
+                  <option value="ENCERRADA">ENCERRADA
+                      <option value="VENCIDA">VENCIDA
+                        <option value="CONCLUIDA">CONCLUIDA
+          </select>
+      </form>
+      </p>
       <button id="voltarDoAcessoCampanha">Voltar</button>
-      <button id="atualizarCampanha">Cadastrar</button>
+      <button id="curtidaCampanha">Curtir</button>
+      <button id="comentarioCampanha">Comentar</button>
+      <button id="atualizarCampanha">Atualizar</button>
+
+      <h2>Curtidas:</h2>
+      <p id="quantCurtidas"></p>
+      <h2>Comentarios</h2>
     </template>
 
 </body>
