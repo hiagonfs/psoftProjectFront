@@ -307,12 +307,14 @@ async function buscarCampanhas() {
     let $pCampanha = document.createElement("p");
     $resultado.appendChild($pCampanha);
 
+    var promQuantoFalta = Promise.resolve(buscaQuantoFaltaMeta(json[i].id)); 
+
     $pCampanha.innerText = "=====================================================================" + "\n" +
     "Nome: " + json[i].nome + "\n" +
     "Descricao: " + json[i].descricao + "\n" +
     "Dono: " + json[i].dono.email + "\n" +
     "Nome Curto: " + json[i].nomeCurto + "\n" +
-    "Quanto falta: R$" + buscaQuantoFaltaMeta(json[i].id) + "\n" +
+    "Quanto falta: R$" + promQuantoFalta + "\n" +
     "=====================================================================";
 
     let $botaoCamp = document.createElement("button");
@@ -405,13 +407,6 @@ function enviaComentario() {
 
   let comentarioCapturado = document.querySelector("#textoComentario").value;
 
- // let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + "/comentar", {
- //   'method': 'POST',
- //   'body': `{"texto": "${texto}"`,
- //   'headers': {'Content-Type': 'application/json',
-  //              'Authorization': 'Bearer ' + localStorage.getItem("token")}
- // });
-
   fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentar', {
     'method': 'POST',
     'body': `{"texto": "${comentarioCapturado}"`,
@@ -424,13 +419,6 @@ function enviaComentario() {
       console.log('Pronto! Comentario enviado com sucesso!');
       alert('Comentário enviado com sucesso!');
   });
-
- //let json = await resposta.json();
-
- //if (resposta.status == 201) {
-//  alert('Comentário enviado com sucesso!');
- // paginaCampanhaIndividual();
- // }
 
 }
 
