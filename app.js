@@ -1,5 +1,5 @@
 let username;
-const baseURL = 'http://localhost:8080/'
+const baseURL = 'https://backendajude.netlify.com/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
@@ -305,16 +305,16 @@ async function buscarCampanhas() {
     campanhas.push(json[i]);
 
     let $pCampanha = document.createElement("p");
-    $resultado.appendChild($pCampanha);
+    $resultado.appendChild($pCampanha); 
 
-    var promQuantoFalta = Promise.resolve(buscaQuantoFaltaMeta(json[i].id)); 
+    let quantiaQueFalta = buscaQuantoFaltaMeta(json[i].id)
 
     $pCampanha.innerText = "=====================================================================" + "\n" +
     "Nome: " + json[i].nome + "\n" +
     "Descricao: " + json[i].descricao + "\n" +
     "Dono: " + json[i].dono.email + "\n" +
     "Nome Curto: " + json[i].nomeCurto + "\n" +
-    "Quanto falta: R$" + promQuantoFalta + "\n" +
+    "Quanto falta: R$" + quantiaQueFalta + "\n" +
     "=====================================================================";
 
     let $botaoCamp = document.createElement("button");
@@ -335,15 +335,29 @@ async function buscarCampanhas() {
 
 }
 
-async function buscaQuantoFaltaMeta(id) {
+function buscaQuantoFaltaMeta(id) {
   
-  let resposta = await fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
+ // let resposta = await fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
+  //  'method': 'GET',
+  //  'headers': {'Content-Type': 'application/json'}
+ // });
+
+  let faltaAinda; 
+
+  fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json'}
+  })
+  .then(r => r.json())
+  .then(d => {
+      faltaAinda = d;
+      console.log(d);
+      console.log(faltaAinda);
+
   });
 
-  let json = await resposta.json();
-  return json;
+  return faltaAinda; 
+ 
 }
 
 function paginaCampanhaIndividual() {
