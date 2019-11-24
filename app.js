@@ -396,29 +396,41 @@ function comentar() {
   let $botaoVoltarParaPaginaCampanha = document.querySelector('#voltarParaPaginaDaCampanha');
   $botaoVoltarParaPaginaCampanha.addEventListener('click', paginaCampanhaIndividual);
 
-  let comentarioCapturado = document.querySelector("#textoComentario").value;
-
   let $botaoEnviarComentario = document.querySelector('#comentarCampanha');
-  $botaoEnviarComentario.addEventListener('click', enviaComentario(comentarioCapturado));
+  $botaoEnviarComentario.addEventListener('click', enviaComentario);
 
 }
 
-async function enviaComentario(texto) {
+function enviaComentario() {
 
-  let resposta = await fetch(baseURL + 'comentario/' + campanhaSelecionada.id, {
+  let comentarioCapturado = document.querySelector("#textoComentario").value;
+
+ // let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + "/comentar", {
+ //   'method': 'POST',
+ //   'body': `{"texto": "${texto}"`,
+ //   'headers': {'Content-Type': 'application/json',
+  //              'Authorization': 'Bearer ' + localStorage.getItem("token")}
+ // });
+
+  fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentar', {
     'method': 'POST',
-    'body': `{"texto": "${texto}",
-              "idCampanha: "${campanhaSelecionada.id}`,
+    'body': `{"texto": "${comentarioCapturado}"`,
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
   })
+  .then(r => r.json())
+  .then(d => {
+      console.log(d);
+      console.log('Pronto! Comentario enviado com sucesso!');
+      alert('Comentário enviado com sucesso!');
+  });
 
- let json = await resposta.json();
+ //let json = await resposta.json();
 
- if (resposta.status == 200) {
-  alert('Comentário enviado com sucesso!');
-  viewPaginaCampanha();
-  }
+ //if (resposta.status == 201) {
+//  alert('Comentário enviado com sucesso!');
+ // paginaCampanhaIndividual();
+ // }
 
 }
 
