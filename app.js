@@ -2,6 +2,7 @@ let username;
 const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
+let campanhaSelecionada;
 
 (async function main() {
   // roteamento
@@ -322,10 +323,12 @@ async function buscarCampanhas() {
   });
 
   var quemFoiClicado = document.getElementById("resultado");
+
   quemFoiClicado.addEventListener("click", function(event) {
     let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
     let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
-    $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual(campanhas[numeroCampanha]));
+    campanhaSelecionada = campanhas[numeroCampanha];
+    $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual);
   })
 
 }
@@ -341,7 +344,7 @@ async function buscaQuantoFaltaMeta(idCampanha) {
 
 function paginaCampanhaIndividual(campanha) {
 
-  window.location.hash = 'campanha/' + campanha.nomeCurto;
+  window.location.hash = 'campanha/' + campanha.nomeCurto + '/atualiza';
 
   let $template = document.querySelector('#viewAcessoCampanha');
   $viewer.innerHTML = $template.innerHTML;
@@ -356,23 +359,49 @@ function paginaCampanhaIndividual(campanha) {
   meta.value = campanha.meta;
 
   let $botaoDeRetorno = document.querySelector("#voltarDoAcessoCampanha");
-  $botaoDeRetorno.addEventListener('click', viewPrincipal);
-
-  let $botaoDeCurtida = document.querySelector("#curtidaCampanha");
-  $botaoDeCurtida.addEventListener('click', curtir(campanha));
-
-  let $botaoDeComentario = document.querySelector("#comentarioCampanha");
-  $botaoDeComentario.addEventListener('click', comentar(campanha));
-
-  let $botaoDeAtualizar = document.querySelector("#atualizarCampanha");
-  $botaoDeAtualizar.addEventListener('click', atualizar(campanha));
-
-  let quantCurtidas = document.querySelector("#quantCurtidas");
-  quantCurtidas.innerText = 5;
+  $botaoDeRetorno.addEventListener('click', viewHome);
 }
 
-function curtir(campanha) {}
+function curtir() {
+  return null;
+}
 
-function comentar(campanha) {}
+function comentar() {
 
-function atualizar(campanha) {}
+  window.location.hash = '/campanha/' + campanhaSelecionada.nomeCurto + '/addComentario';
+
+  let $template = document.querySelector('#viewDeComentario');
+  $viewer.innerHTML = $template.innerHTML;
+
+  let $botaoVoltarParaPaginaCampanha = document.querySelector('#voltarParaPaginaDaCampanha');
+  $botaoVoltarParaPaginaCampanha.addEventListener('click', viewPaginaCampanha);
+
+  let comentarioCapturado = document.querySelector("#textoComentario");
+
+  let $botaoEnviarComentario = document.querySelector('#comentarCampanha');
+  $botaoEnviarComentario.addEventListener('click', enviaComentario(comentarioCapturado.value));
+
+}
+
+async function enviaComentario(texto) {
+
+  let resposta = await fetch(baseURL + 'comentario', {
+    'method': 'POST',
+    'body': `{"texto": "${texto}",
+    "campanha": "${campanhaSelecionada}"`,
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  });
+
+ let json = await resposta.json();
+
+ if (resposta.status == 200) {
+  alert('Comentário enviado com sucesso!');
+  viewPaginaCampanha();
+  }
+
+}
+
+function atualizar() {
+  return null;
+}
