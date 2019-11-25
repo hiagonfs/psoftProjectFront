@@ -1,5 +1,6 @@
 let username;
 const baseURL = 'https://psoft-ajude.herokuapp.com/'
+//const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
@@ -46,13 +47,13 @@ function viewPrincipal() {
 
   let $botaoLogar = document.querySelector("#logar");
   let $botaoIrCadastrarUsuario = document.querySelector("#irCadastrarUsuario");
-  let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
+//  let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
 
   let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
 
   $botaoLogar.addEventListener('click', viewLogin);
   $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
-  $botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
+  //$botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
 
   $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
 
@@ -288,50 +289,54 @@ async function buscarCampanhas() {
 
   let resposta = await fetch(baseURL + 'campanha?nome=' + textoDaBusca, {
     'method': 'GET',
-    'headers': {'Content-Type': 'application/json'}
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
   });
 
   let json = await resposta.json();
-  console.log(json);
 
-  let $resultado = document.getElementById("resultado");
-  $resultado.innerHTML = '';
+  if (resposta.status == 200) {
+    let $resultado = document.getElementById("resultado");
+    $resultado.innerHTML = '';
 
-  let campanhas = [];
+    let campanhas = [];
 
-  json.forEach((e, i) => {
+    json.forEach((e, i) => {
 
-    campanhas.push(json[i]);
+      campanhas.push(json[i]);
 
-    let $pCampanha = document.createElement("p");
-    $resultado.appendChild($pCampanha);
+      let $pCampanha = document.createElement("p");
+      $resultado.appendChild($pCampanha);
 
-    let quantiaQueFalta = buscaQuantoFaltaMeta(json[i].id)
+      let quantiaQueFalta = buscaQuantoFaltaMeta(json[i].id)
 
-    $pCampanha.innerText = "=====================================================================" + "\n" +
-    "Nome: " + json[i].nome + "\n" +
-    "Descricao: " + json[i].descricao + "\n" +
-    "Dono: " + json[i].dono.email + "\n" +
-    "Nome Curto: " + json[i].nomeCurto + "\n" +
-    "Quanto falta: R$" + quantiaQueFalta + "\n" +
-    "=====================================================================";
+      $pCampanha.innerText = "=====================================================================" + "\n" +
+      "Nome: " + json[i].nome + "\n" +
+      "Descricao: " + json[i].descricao + "\n" +
+      "Dono: " + json[i].dono.email + "\n" +
+      "Nome Curto: " + json[i].nomeCurto + "\n" +
+      "Quanto falta: R$" + quantiaQueFalta + "\n" +
+      "=====================================================================";
 
-    let $botaoCamp = document.createElement("button");
-    $botaoCamp.innerHTML = 'Selecionar esta campanha';
-    $resultado.appendChild($botaoCamp);
-    $botaoCamp.id = i;
+      let $botaoCamp = document.createElement("button");
+      $botaoCamp.innerHTML = 'Selecionar esta campanha';
+      $resultado.appendChild($botaoCamp);
+      $botaoCamp.id = i;
 
-  });
+    });
 
-  var quemFoiClicado = document.getElementById("resultado");
+    var quemFoiClicado = document.getElementById("resultado");
 
-  quemFoiClicado.addEventListener("click", function(event) {
-    let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
-    let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
-    campanhaSelecionada = campanhas[numeroCampanha];
-    $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual);
-  })
-
+    quemFoiClicado.addEventListener("click", function(event) {
+      let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
+      let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
+      campanhaSelecionada = campanhas[numeroCampanha];
+      $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual);
+    })
+  }
+  else {
+    alert(json.message);
+  }
 }
 
 function buscaQuantoFaltaMeta(id) {
