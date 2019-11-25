@@ -1,6 +1,6 @@
 let username;
-const baseURL = 'https://psoft-ajude.herokuapp.com/'
-//const baseURL = 'http://localhost:8080/'
+//const baseURL = 'https://psoft-ajude.herokuapp.com/'
+const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
@@ -46,15 +46,12 @@ function viewPrincipal() {
   $viewer.innerHTML = $template.innerHTML;
 
   let $botaoLogar = document.querySelector("#logar");
+  $botaoLogar.addEventListener('click', viewLogin);
+
   let $botaoIrCadastrarUsuario = document.querySelector("#irCadastrarUsuario");
-//  let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
+  $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
 
   let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
-
-  $botaoLogar.addEventListener('click', viewLogin);
-  $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
-  //$botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
-
   $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
 
 }
@@ -121,16 +118,15 @@ async function viewHome() {
 
       let $h1 = document.createElement("h1");
       $informacoes.appendChild($h1);
-      $h1.innerText = "Nome: " + json.nome + "\n" +
-       "Sobrenome: " + json.sobrenome + "\n" +
-       "E-mail: "+ json.email;
+      $h1.innerText = json.nome +" " + json.sobrenome + "!\n";
 
-      let $botaoPaginaDeCampanha = document.querySelector("#paginaDeCampanha");
+      let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
+      $botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
 
-      $botaoPaginaDeCampanha.addEventListener('click', viewPaginaCampanha);
+      let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
+      $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
 
       let $botaoParaSairDoSistema = document.querySelector("#sairDoSistema");
-
       $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
 
       // preenchimento com informacoes da campanha
@@ -195,7 +191,7 @@ function viewCadastraCampanha() {
   $botaoCadastrarCampanha.addEventListener('click', cadastrar_campanha);
 
   let $botaoVoltarDaCampanha = document.querySelector("#voltarDoCadastroCampanha");
-  $botaoVoltarDaCampanha.addEventListener('click', viewPrincipal);
+  $botaoVoltarDaCampanha.addEventListener('click', viewHome);
 
 }
 
@@ -225,7 +221,7 @@ async function cadastrar_campanha() {
   if (resposta.status == 201) {
     console.log('Pronto! Campanha criada com sucesso!');
     window.location.hash = defineURLUnicaCampanha;
-    viewPaginaCampanha();
+    viewHome();
   }
   else {
     alert(json.message);

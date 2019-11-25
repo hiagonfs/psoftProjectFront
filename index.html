@@ -90,13 +90,36 @@
         <h1>Bem-vindo(a),</h1>
         <div id="infoUsuario"></div>
 
+        <button id="irVerPerfil">Perfil</button>
         <button id="irCadastrarCampanha">Cadastrar Campanha</button>
+        <button id="sairDoSistema">Sair</button>
+
+        <h2>Buscar Campanhas</h2>
+
+        <div id="ferramentasBusca">
+          <div class="lado">
+            <input id="buscaCampanha" type="text">
+          </div>
+          <div class="lado menor">
+            <form id="metodoAparicao">
+                <select name="metodoAparicao">
+                    <option value="ativa" selected>ATIVA
+                      <option value="encerra">ENCERRADA
+                        <option value="vencida">VENCIDA
+                          <option value="concluida">CONCLUIDA
+                </select>
+            </form>
+          </div>
+          <div class="lado menor direita">
+            <button id="buscarCampanhasSelecionadas">Pesquisar</button>
+          </div>
+        </div>
+
+        <div id="resultado">
+
+        </div>
 
         <div id="infosCampanhas"></div>
-
-        <button id="paginaDeCampanha">Campanhas</button>
-
-        <button id="sairDoSistema">Sair</button>
 
     </template>
 
