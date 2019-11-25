@@ -1,6 +1,6 @@
 let username;
-const baseURL = 'https://psoft-ajude.herokuapp.com/'
-//const baseURL = 'http://localhost:8080/'
+//const baseURL = 'https://psoft-ajude.herokuapp.com/'
+const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
@@ -393,37 +393,26 @@ function paginaCampanhaIndividual() {
 
   window.location.hash = 'campanha/' + campanhaSelecionada.nomeCurto;
 
-  let $template = document.querySelector('#viewCampanhaIndividual');
+  let $template = document.querySelector('#viewAcessoCampanha');
   $viewer.innerHTML = $template.innerHTML;
 
-  let $informacoesDaCampanha = document.querySelector("#infosCampanha");
-  $informacoesDaCampanha.innerHTML = '';
+  let nome = document.querySelector("#nome");
+  nome.value = campanhaSelecionada.nome;
+  let descricao = document.querySelector("#descricao");
+  descricao.value = campanhaSelecionada.descricao;
+  let deadline = document.querySelector("#deadline");
+  deadline.value = campanhaSelecionada.deadline;
+  let meta = document.querySelector("#meta");
+  meta.value = campanhaSelecionada.meta;
 
-  let $h1 = document.createElement("h1");
-  $informacoesDaCampanha.appendChild($h1);
-  $h1.innerText = "Nome da Campanha: " + campanhaSelecionada.nome + "\n" +
-  "Descrição: " + campanhaSelecionada.descricao + "\n" +
-  "O id da Campanha para fins de teste: " + campanhaSelecionada.id + "\n" +
-  "A meta da Campanha é: "+ campanhaSelecionada.meta + "\n" +
-  "Ainda falta para atingir a meta: " + buscaQuantoFaltaMeta(campanhaSelecionada.id) + "\n" +
-  "O dono da campanha: " + campanhaSelecionada.dono.email;
-
-  let $h2 = document.createElement("h2");
-  $informacoesDaCampanha.appendChild($h2);
-
-  $h2.innerText = "O que já disseram sobre essa campanha?" + "\n" +
-  "========"  + "\n" +
-  campanhaSelecionada.comentarios  + "\n" +
-  "========";
-
-  let $botaoDeRetorno = document.querySelector("#voltarParaBuscaDeCampanha");
-  $botaoDeRetorno.addEventListener('click', viewPaginaCampanha);
-
-  let $botaoDeComentario = document.querySelector("#comentarioCampanha");
-  $botaoDeComentario.addEventListener('click', comentar);
+  let $botaoDeRetorno = document.querySelector("#voltarDoAcessoCampanha");
+  $botaoDeRetorno.addEventListener('click', viewPrincipal);
 
   let $botaoDeCurtida = document.querySelector("#curtidaCampanha");
   $botaoDeCurtida.addEventListener('click', curtir);
+
+  let $botaoDeComentario = document.querySelector("#comentarioCampanha");
+  $botaoDeComentario.addEventListener('click', comentar);
 
 }
 
