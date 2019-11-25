@@ -321,33 +321,11 @@ async function buscarCampanhas() {
   let json = await resposta.json();
 
   if (resposta.status == 200) {
-    let $resultado = document.getElementById("resultado");
-    $resultado.innerHTML = '';
-
     let campanhas = [];
 
     json.forEach((e, i) => {
-
       campanhas.push(json[i]);
-
-      let $pCampanha = document.createElement("p");
-      $resultado.appendChild($pCampanha);
-
-      let quantiaQueFalta = buscaQuantoFaltaMeta(json[i].id)
-
-      $pCampanha.innerText = "=====================================================================" + "\n" +
-      "Nome: " + json[i].nome + "\n" +
-      "Descricao: " + json[i].descricao + "\n" +
-      "Dono: " + json[i].dono.email + "\n" +
-      "Nome Curto: " + json[i].nomeCurto + "\n" +
-      "Quanto falta: R$" + quantiaQueFalta + "\n" +
-      "=====================================================================";
-
-      let $botaoCamp = document.createElement("button");
-      $botaoCamp.innerHTML = 'Selecionar esta campanha';
-      $resultado.appendChild($botaoCamp);
-      $botaoCamp.id = i;
-
+      buscaQuantoFaltaMeta(json[i], i);
     });
 
     var quemFoiClicado = document.getElementById("resultado");
@@ -364,7 +342,7 @@ async function buscarCampanhas() {
   }
 }
 
-function buscaQuantoFaltaMeta(id) {
+function buscaQuantoFaltaMeta(campanha, indice) {
 
  // let resposta = await fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
   //  'method': 'GET',
@@ -373,7 +351,7 @@ function buscaQuantoFaltaMeta(id) {
 
   let faltaAinda;
 
-  fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
+  fetch(baseURL + 'campanha/' + campanha.id + '/quantoFalta', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json'}
   })
@@ -383,9 +361,26 @@ function buscaQuantoFaltaMeta(id) {
       console.log(d);
       console.log(faltaAinda);
 
-  });
+      let $resultado = document.getElementById("resultado");
+      $resultado.innerHTML = '';
 
-  return faltaAinda;
+      let $pCampanha = document.createElement("p");
+      $resultado.appendChild($pCampanha);
+
+      $pCampanha.innerText = "=====================================================================" + "\n" +
+      "Nome: " + campanha.nome + "\n" +
+      "Descricao: " + campanha.descricao + "\n" +
+      "Dono: " + campanha.dono.email + "\n" +
+      "Nome Curto: " + campanha.nomeCurto + "\n" +
+      "Quanto falta: R$" + faltaAinda + "\n" +
+      "=====================================================================";
+
+      let $botaoCamp = document.createElement("button");
+      $botaoCamp.innerHTML = 'Selecionar esta campanha';
+      $resultado.appendChild($botaoCamp);
+      $botaoCamp.id = indice;
+
+  });
 
 }
 
@@ -427,6 +422,9 @@ function comentar() {
   let $template = document.querySelector('#viewDeComentario');
   $viewer.innerHTML = $template.innerHTML;
 
+  let $tituloPagina = document.querySelector('#tituloPaginaComentario');
+  $tituloPagina.innerText += " " + campanhaSelecionada.nome + " ?";
+
   let $botaoVoltarParaPaginaCampanha = document.querySelector('#voltarParaPaginaDaCampanha');
   $botaoVoltarParaPaginaCampanha.addEventListener('click', paginaCampanhaIndividual);
 
@@ -435,24 +433,30 @@ function comentar() {
 
 }
 
-function enviaComentario() {
+async function enviaComentario() {
 
   let comentarioCapturado = document.querySelector("#textoComentario").value;
 
-  fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentar', {
+  let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentar', {
     'method': 'POST',
-    'body': `{"texto": "${comentarioCapturado}"`,
+    'body': `{"texto": "${comentarioCapturado}"}`,
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
   })
-  .then(r => r.json())
-  .then(d => {
-      console.log(d);
-      console.log('Pronto! Comentario enviado com sucesso!');
-      alert('Comentário enviado com sucesso!');
-  });
 
+  let json = await resposta.json();
+
+  if (resposta.status == 201) {
+    console.log('Pronto! Comentario enviado com sucesso!');
+  }
+  else {
+    alert(json);
+  }
 }
+
+//async function listarComentarios() {
+  //let
+//}
 
 function atualizar() {
   return null;
