@@ -1,5 +1,5 @@
 let username;
-const baseURL = 'https://backendajude.netlify.com/'
+const baseURL = 'https://psoft-ajude.herokuapp.com/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
@@ -305,7 +305,7 @@ async function buscarCampanhas() {
     campanhas.push(json[i]);
 
     let $pCampanha = document.createElement("p");
-    $resultado.appendChild($pCampanha); 
+    $resultado.appendChild($pCampanha);
 
     let quantiaQueFalta = buscaQuantoFaltaMeta(json[i].id)
 
@@ -336,13 +336,13 @@ async function buscarCampanhas() {
 }
 
 function buscaQuantoFaltaMeta(id) {
-  
+
  // let resposta = await fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
   //  'method': 'GET',
   //  'headers': {'Content-Type': 'application/json'}
  // });
 
-  let faltaAinda; 
+  let faltaAinda;
 
   fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
     'method': 'GET',
@@ -356,8 +356,8 @@ function buscaQuantoFaltaMeta(id) {
 
   });
 
-  return faltaAinda; 
- 
+  return faltaAinda;
+
 }
 
 function paginaCampanhaIndividual() {
@@ -377,7 +377,7 @@ function paginaCampanhaIndividual() {
   "O id da Campanha para fins de teste: " + campanhaSelecionada.id + "\n" +
   "A meta da Campanha é: "+ campanhaSelecionada.meta + "\n" +
   "Ainda falta para atingir a meta: " + buscaQuantoFaltaMeta(campanhaSelecionada.id) + "\n" +
-  "O dono da campanha: " + campanhaSelecionada.dono.email; 
+  "O dono da campanha: " + campanhaSelecionada.dono.email;
 
   let $h2 = document.createElement("h2");
   $informacoesDaCampanha.appendChild($h2);
@@ -385,7 +385,7 @@ function paginaCampanhaIndividual() {
   $h2.innerText = "O que já disseram sobre essa campanha?" + "\n" +
   "========"  + "\n" +
   campanhaSelecionada.comentarios  + "\n" +
-  "========"; 
+  "========";
 
   let $botaoDeRetorno = document.querySelector("#voltarParaBuscaDeCampanha");
   $botaoDeRetorno.addEventListener('click', viewPaginaCampanha);
