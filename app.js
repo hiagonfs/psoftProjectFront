@@ -288,8 +288,7 @@ async function buscarCampanhas() {
 
   let resposta = await fetch(baseURL + 'campanha?nome=' + textoDaBusca, {
     'method': 'GET',
-    'headers': {'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+    'headers': {'Content-Type': 'application/json'}
   });
 
   let json = await resposta.json();
