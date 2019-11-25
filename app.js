@@ -133,10 +133,8 @@ async function viewHome() {
       $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
 
       // preenchimento com informacoes da campanha
-
       let $informacoesCampanha = document.querySelector("#infosCampanhas");
-
-    $informacoesCampanha.innerHTML = '';
+      $informacoesCampanha.innerHTML = '';
     }
     else {
       alert(json.message);
@@ -344,11 +342,6 @@ async function buscarCampanhas() {
 
 function buscaQuantoFaltaMeta(campanha, indice) {
 
- // let resposta = await fetch(baseURL + 'campanha/' + id + '/quantoFalta', {
-  //  'method': 'GET',
-  //  'headers': {'Content-Type': 'application/json'}
- // });
-
   let faltaAinda;
 
   fetch(baseURL + 'campanha/' + campanha.id + '/quantoFalta', {
@@ -409,6 +402,11 @@ function paginaCampanhaIndividual() {
   let $botaoDeComentario = document.querySelector("#comentarioCampanha");
   $botaoDeComentario.addEventListener('click', comentar);
 
+  let $comentariosCampanhaDiv = document.querySelector("#comentariosCampanha");
+  $comentariosCampanhaDiv.innerHTML = '';
+
+  listarComentarios($comentariosCampanhaDiv);
+
 }
 
 function curtir() {
@@ -448,15 +446,45 @@ async function enviaComentario() {
 
   if (resposta.status == 201) {
     console.log('Pronto! Comentario enviado com sucesso!');
+    paginaCampanhaIndividual();
   }
   else {
     alert(json);
   }
 }
 
-//async function listarComentarios() {
-  //let
-//}
+async function listarComentarios(div) {
+  let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentario/listar', {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  })
+
+  let json = await resposta.json();
+
+  if (resposta.status == 200) {
+    let comentarios = [];
+
+    json.forEach((e, i) => {
+      comentarios.push(json[i]);
+
+      let $pComentario = document.createElement("p");
+      div.appendChild($pComentario);
+      let quemComentou = json[i].quemComentou.nome + " " + json[i].quemComentou.sobrenome
+      $pComentario.innerText = "=====================================================================" + "\n" +
+      json[i].texto + "\n" + "(por " + quemComentou + ")" + "\n" +
+      "=====================================================================";
+
+    });
+  }
+  else {
+    alert(json);
+  }
+}
+
+async function listarCampanhasDoUsuario() {
+  //let resposta = await fetch(baseURL + 'campanha/' + )
+}
 
 function atualizar() {
   return null;
