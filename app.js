@@ -1,6 +1,6 @@
 let username;
-//const baseURL = 'https://psoft-ajude.herokuapp.com/'
-const baseURL = 'http://localhost:8080/'
+const baseURL = 'https://psoft-ajude.herokuapp.com/'
+//const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
@@ -120,6 +120,9 @@ async function viewHome() {
       $informacoes.appendChild($h1);
       $h1.innerText = json.nome +" " + json.sobrenome + "!\n";
 
+      let $botaoIrPerfilUsuario = document.querySelector('#irVerPerfil');
+      $botaoIrPerfilUsuario.addEventListener('click', viewPerfilUsuario);
+
       let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
       $botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
 
@@ -138,6 +141,32 @@ async function viewHome() {
     else {
       alert(json.message);
     }
+}
+
+async function viewPerfilUsuario() {
+
+  let $template = document.querySelector('#viewPerfilUsuario');
+  $viewer.innerHTML = $template.innerHTML;
+
+  let resposta = await fetch(baseURL + 'usuario', {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  })
+
+  let json = await resposta.json();
+
+  if (resposta.status == 200) {
+    window.location.hash = 'perfil/' +  json.nome + "_" + json.sobrenome;
+    let $nomeUsuario = document.querySelector('nomeUsuario');
+    nomeUsuario.innerText = json.nome + " " + json.sobrenome;
+    let $emailUsuario = document.querySelector('emailUsuario');
+    emailUsuario.innerText = json.email;
+  }
+  else {
+    alert(json);
+  }
+
 }
 
 function viewCadastroUsuario () {
