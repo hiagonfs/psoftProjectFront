@@ -51,10 +51,44 @@ function viewPrincipal() {
   let $botaoIrCadastrarUsuario = document.querySelector("#irCadastrarUsuario");
   $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
 
+  let criterio = document.querySelector("#metodoOrdenacao"); 
+
   let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
-  $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
+  $botaoBuscarCampanhasSelecionadas.addEventListener('click', listaTop5Campanhas(criterio));
 
 }
+
+async function listaTop5Campanhas(criterio) {
+
+  let resposta = await fetch(baseURL + 'ordenadas/' + criterio, {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  });
+
+  console.log(criterio);
+
+  let json = await resposta.json();
+
+  $campanhasTop5 = document.querySelector("#campanhasTop5");
+
+  if (resposta.status == 200) {
+
+    json.forEach((e, i) => {
+
+      let $pCampanha = document.createElement("p");
+      $campanhasTop5.appendChild($pCampanha);
+
+      $pCampanha.innerText = "=====================================================================" + "\n" +
+      "Nome: " + json[i].nome + "\n" +
+      "Descricao: " + json[i].descricao + "\n" +
+      "Dono: " + json[i].dono.email + "\n" +
+      "Nome Curto: " + json[i].nomeCurto + "\n" +
+      "=====================================================================";
+    });
+
+
+}}
 
 function viewLogin() {
 
@@ -453,7 +487,28 @@ async function enviaComentario() {
   }
 }
 
+async function apagaComentario(idDoComentario) {
+
+  let resposta = await fetch(baseURL + 'campanha/' + 'comentario/' + idDoComentario + '/deleta', {
+    'method': 'DELETE',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  })
+
+  if (resposta.status == 200) {
+    alert("Comentário removido!"); 
+  } else {
+    alert("Você não pode remover esse comentário!");
+  }
+
+}
+
+async function respondeComentario(idDoComentario) {
+
+}
+
 async function listarComentarios(div) {
+
   let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentario/listar', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
@@ -472,10 +527,21 @@ async function listarComentarios(div) {
       div.appendChild($pComentario);
       let quemComentou = json[i].quemComentou.nome + " " + json[i].quemComentou.sobrenome
       $pComentario.innerText = "=====================================================================" + "\n" +
-      json[i].texto + "\n" + "(por " + quemComentou + ")" + "\n" +
-      "=====================================================================";
+      json[i].texto + "\n" + "(por " + quemComentou + ")"+ "\n" +
+      "=====================================================================" + "\n";
+
+      let $botaoDeRemover = document.createElement("button");
+      $botaoDeRemover.innerHTML = 'Remover comentário';
+      $pComentario.appendChild($botaoDeRemover);
+      $botaoDeRemover.addEventListener('click', apagaComentario(idDoComentario));
+
+      let $botaoDeResposta = document.createElement("button");
+      $botaoDeResposta.innerHTML = 'Responder comentario';
+      $pComentario.appendChild($botaoDeResposta);
+      $botaoDeResposta.addEventListener('click', respondeComentario(idDoComentario));
 
     });
+
   }
   else {
     alert(json);
