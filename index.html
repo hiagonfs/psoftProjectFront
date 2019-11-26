@@ -41,16 +41,15 @@
             <input id="buscaCampanha" type="text">
           </div>
           <div class="lado menor">
-            <form id="metodoOrdenacao">
-                <select name="metodoOrdenacao">
+            <form id="metodoOrdenacaoForm">
+                <select id="metodoOrdenacao" name="metodoOrdenacao">
+                  <option value="quantia">Quantia
                     <option value="data" selected>Data
-                        <option value="quantia">Quantia
-                            <option value="likes">Likes
+                      <option value="likes">Likes
                 </select>
             </form>
           </div>
           <div class="lado menor direita">
-              <div id="campanhasTop5"></div>
             <button id="buscarCampanhasSelecionadas">Pesquisar</button>
           </div>
         </div>
@@ -58,10 +57,7 @@
         <div class="todo">
           <h2>Campanhas Ativas (top5):</h2>
         </div>
-          <div id="campanhasOrdenadas"></div>
-          <div id="resultado"></div>
-
-
+          <div id="campanhasTop5"></div>
 
     </template>
 

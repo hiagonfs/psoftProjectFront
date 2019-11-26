@@ -51,44 +51,45 @@ function viewPrincipal() {
   let $botaoIrCadastrarUsuario = document.querySelector("#irCadastrarUsuario");
   $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
 
-  let criterio = document.querySelector("#metodoOrdenacao"); 
+  let criterio = document.querySelector("#metodoOrdenacao");
 
   let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
-  $botaoBuscarCampanhasSelecionadas.addEventListener('click', listaTop5Campanhas(criterio));
+  $botaoBuscarCampanhasSelecionadas.addEventListener('click', listaTop5Campanhas(criterio.value));
 
 }
 
 async function listaTop5Campanhas(criterio) {
 
-  let resposta = await fetch(baseURL + 'ordenadas/' + criterio, {
+  let resposta = await fetch(baseURL + 'campanha/ordenadas/' + criterio, {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
   });
 
-  console.log(criterio);
-
   let json = await resposta.json();
-
-  $campanhasTop5 = document.querySelector("#campanhasTop5");
 
   if (resposta.status == 200) {
 
+    let campanhas = [];
+
     json.forEach((e, i) => {
-
-      let $pCampanha = document.createElement("p");
-      $campanhasTop5.appendChild($pCampanha);
-
-      $pCampanha.innerText = "=====================================================================" + "\n" +
-      "Nome: " + json[i].nome + "\n" +
-      "Descricao: " + json[i].descricao + "\n" +
-      "Dono: " + json[i].dono.email + "\n" +
-      "Nome Curto: " + json[i].nomeCurto + "\n" +
-      "=====================================================================";
+      campanhas.push(json[i]);
+      buscaQuantoFaltaMeta(json[i], i, "campanhasTop5");
     });
 
+    var quemFoiClicado = document.getElementById("campanhasTop5");
 
-}}
+    quemFoiClicado.addEventListener("click", function(event) {
+      let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
+      let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
+      campanhaSelecionada = campanhas[numeroCampanha];
+      $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual);
+    })
+  }
+  else {
+    alert(json);
+  }
+}
 
 function viewLogin() {
 
@@ -357,7 +358,7 @@ async function buscarCampanhas() {
 
     json.forEach((e, i) => {
       campanhas.push(json[i]);
-      buscaQuantoFaltaMeta(json[i], i);
+      buscaQuantoFaltaMeta(json[i], i, "resultado");
     });
 
     var quemFoiClicado = document.getElementById("resultado");
@@ -374,7 +375,7 @@ async function buscarCampanhas() {
   }
 }
 
-function buscaQuantoFaltaMeta(campanha, indice) {
+function buscaQuantoFaltaMeta(campanha, indice, idResultadoHTML) {
 
   let faltaAinda;
 
@@ -388,7 +389,7 @@ function buscaQuantoFaltaMeta(campanha, indice) {
       console.log(d);
       console.log(faltaAinda);
 
-      let $resultado = document.getElementById("resultado");
+      let $resultado = document.getElementById(idResultadoHTML);
       $resultado.innerHTML = '';
 
       let $pCampanha = document.createElement("p");
@@ -496,7 +497,7 @@ async function apagaComentario(idDoComentario) {
   })
 
   if (resposta.status == 200) {
-    alert("Comentário removido!"); 
+    alert("Comentário removido!");
   } else {
     alert("Você não pode remover esse comentário!");
   }
