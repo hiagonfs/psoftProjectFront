@@ -4,6 +4,7 @@ const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
+let comentarioSelecionado; 
 
 (async function main() {
   // roteamento
@@ -437,6 +438,9 @@ function paginaCampanhaIndividual() {
   let $botaoDeComentario = document.querySelector("#comentarioCampanha");
   $botaoDeComentario.addEventListener('click', comentar);
 
+  let $botaoDeDoar = document.querySelector("#realizarDoacao");
+  $botaoDeDoar.addEventListener('click', doar);
+
   let $comentariosCampanhaDiv = document.querySelector("#comentariosCampanha");
   $comentariosCampanhaDiv.innerHTML = '';
 
@@ -446,6 +450,24 @@ function paginaCampanhaIndividual() {
 
 function curtir() {
   return null;
+}
+
+function doar() {
+
+  window.location.hash = '/campanha/' + campanhaSelecionada.nomeCurto + '/doacao';
+
+  let $template = document.querySelector('#viewDeDoacao');
+  $viewer.innerHTML = $template.innerHTML;
+
+  let $tituloPagina = document.querySelector('#tituloPaginaDeDoacao');
+  $tituloPagina.innerText += " " + campanhaSelecionada.nome + " ?";
+
+  let $botaoVoltarParaPaginaCampanha = document.querySelector('#voltarParaPaginaDaCampanha');
+  $botaoVoltarParaPaginaCampanha.addEventListener('click', paginaCampanhaIndividual);
+
+  let $botaoEnviarDoacao = document.querySelector('#enviarDoacao');
+  $botaoEnviarDoacao.addEventListener('click', enviaDoacao);
+
 }
 
 function comentar() {
@@ -463,6 +485,29 @@ function comentar() {
 
   let $botaoEnviarComentario = document.querySelector('#comentarCampanha');
   $botaoEnviarComentario.addEventListener('click', enviaComentario);
+
+}
+
+async function enviaDoacao() {
+  
+  let valorCapturado = document.querySelector("#valorDoacao").value;
+
+  let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/doacao', {
+    'method': 'POST',
+    'body': `{"quantiaDoada": "${valorCapturado}"}`,
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  })
+
+  let json = await resposta.json();
+
+  if (resposta.status == 201) {
+    console.log('Pronto! Valor enviado com sucesso para a campanha!');
+    paginaCampanhaIndividual();
+  }
+  else {
+    alert(json);
+  }
 
 }
 
@@ -488,9 +533,9 @@ async function enviaComentario() {
   }
 }
 
-async function apagaComentario(idDoComentario) {
+async function apagaComentario() {
 
-  let resposta = await fetch(baseURL + 'campanha/' + 'comentario/' + idDoComentario + '/deleta', {
+  let resposta = await fetch(baseURL + 'campanha/comentario/deleta/' + comentarioSelecionado.id, {
     'method': 'DELETE',
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
@@ -505,7 +550,7 @@ async function apagaComentario(idDoComentario) {
 }
 
 async function respondeComentario(idDoComentario) {
-
+  return null; 
 }
 
 async function listarComentarios(div) {
@@ -533,15 +578,28 @@ async function listarComentarios(div) {
 
       let $botaoDeRemover = document.createElement("button");
       $botaoDeRemover.innerHTML = 'Remover comentário';
+      $botaoDeRemover.id = i;
       $pComentario.appendChild($botaoDeRemover);
-      $botaoDeRemover.addEventListener('click', apagaComentario(idDoComentario));
+      
+      $botaoDeRemover.addEventListener('click', apagaComentario);
 
       let $botaoDeResposta = document.createElement("button");
       $botaoDeResposta.innerHTML = 'Responder comentario';
       $pComentario.appendChild($botaoDeResposta);
-      $botaoDeResposta.addEventListener('click', respondeComentario(idDoComentario));
+      $botaoDeResposta.addEventListener('click', respondeComentario);
 
     });
+
+    var comentarioQueFoiClicado = document.getElementById("comentariosCampanha");
+
+    comentarioQueFoiClicado.addEventListener("click", function(event) {
+      let $botaoDoComentarioQueFoiClicado = event.target; // este é o elemento clicado
+      console.log("aqui o que foi clicado" + $botaoDoComentarioQueFoiClicado.id);
+      let numeroDoComentario = $botaoDoComentarioQueFoiClicado.id;
+      comentarioSelecionado = comentarios[numeroDoComentario];
+      console.log(comentarioSelecionado.id); 
+      $botaoDoComentarioQueFoiClicado.addEventListener('click', function(){});
+    })
 
   }
   else {
@@ -551,6 +609,7 @@ async function listarComentarios(div) {
 
 async function listarCampanhasDoUsuario() {
   //let resposta = await fetch(baseURL + 'campanha/' + )
+  return null; 
 }
 
 function atualizar() {
