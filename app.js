@@ -4,7 +4,8 @@ const baseURL = 'http://localhost:8080/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
-let comentarioSelecionado; 
+let comentarioSelecionado;
+let criterioDeOrdenacao;
 
 (async function main() {
   // roteamento
@@ -52,16 +53,19 @@ function viewPrincipal() {
   let $botaoIrCadastrarUsuario = document.querySelector("#irCadastrarUsuario");
   $botaoIrCadastrarUsuario.addEventListener('click', viewCadastroUsuario);
 
-  let criterio = document.querySelector("#metodoOrdenacao");
+  let $botaoOrdenarTop5 = document.querySelector("#ordenarTop5");
+  $botaoOrdenarTop5.addEventListener('click', listaTop5Campanhas);
 
-  let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
-  $botaoBuscarCampanhasSelecionadas.addEventListener('click', listaTop5Campanhas(criterio.value));
-
+  listaTop5Campanhas();
 }
 
-async function listaTop5Campanhas(criterio) {
+async function listaTop5Campanhas() {
 
-  let resposta = await fetch(baseURL + 'campanha/ordenadas/' + criterio, {
+  criterioDeOrdenacao = document.querySelector("#metodoOrdenacao").value;
+
+  console.log(criterioDeOrdenacao);
+
+  let resposta = await fetch(baseURL + 'campanha/ordenadas/' + criterioDeOrdenacao, {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
@@ -69,13 +73,18 @@ async function listaTop5Campanhas(criterio) {
 
   let json = await resposta.json();
 
+  console.log(json);
+
   if (resposta.status == 200) {
 
     let campanhas = [];
 
     json.forEach((e, i) => {
+      let $divParaCampanhas = document.getElementById("campanhasTop5");
+      $divParaCampanhas.innerHTML = '';
+
       campanhas.push(json[i]);
-      buscaQuantoFaltaMeta(json[i], i, "campanhasTop5");
+      buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
     });
 
     var quemFoiClicado = document.getElementById("campanhasTop5");
@@ -358,8 +367,11 @@ async function buscarCampanhas() {
     let campanhas = [];
 
     json.forEach((e, i) => {
+      let $divParaCampanhas = document.getElementById("resultado");
+      $divParaCampanhas.innerHTML = '';
+
       campanhas.push(json[i]);
-      buscaQuantoFaltaMeta(json[i], i, "resultado");
+      buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
     });
 
     var quemFoiClicado = document.getElementById("resultado");
@@ -376,7 +388,7 @@ async function buscarCampanhas() {
   }
 }
 
-function buscaQuantoFaltaMeta(campanha, indice, idResultadoHTML) {
+function buscaQuantoFaltaMeta(campanha, indice, divParaCampanhas) {
 
   let faltaAinda;
 
@@ -390,23 +402,20 @@ function buscaQuantoFaltaMeta(campanha, indice, idResultadoHTML) {
       console.log(d);
       console.log(faltaAinda);
 
-      let $resultado = document.getElementById(idResultadoHTML);
-      $resultado.innerHTML = '';
-
       let $pCampanha = document.createElement("p");
-      $resultado.appendChild($pCampanha);
+      divParaCampanhas.appendChild($pCampanha);
 
       $pCampanha.innerText = "=====================================================================" + "\n" +
       "Nome: " + campanha.nome + "\n" +
       "Descricao: " + campanha.descricao + "\n" +
       "Dono: " + campanha.dono.email + "\n" +
-      "Nome Curto: " + campanha.nomeCurto + "\n" +
       "Quanto falta: R$" + faltaAinda + "\n" +
+      "Deadline: " + campanha.deadline + "\n" +
       "=====================================================================";
 
       let $botaoCamp = document.createElement("button");
       $botaoCamp.innerHTML = 'Selecionar esta campanha';
-      $resultado.appendChild($botaoCamp);
+      divParaCampanhas.appendChild($botaoCamp);
       $botaoCamp.id = indice;
 
   });
@@ -489,7 +498,7 @@ function comentar() {
 }
 
 async function enviaDoacao() {
-  
+
   let valorCapturado = document.querySelector("#valorDoacao").value;
 
   let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/doacao', {
@@ -550,7 +559,7 @@ async function apagaComentario() {
 }
 
 async function respondeComentario(idDoComentario) {
-  return null; 
+  return null;
 }
 
 async function listarComentarios(div) {
@@ -580,7 +589,7 @@ async function listarComentarios(div) {
       $botaoDeRemover.innerHTML = 'Remover comentário';
       $botaoDeRemover.id = i;
       $pComentario.appendChild($botaoDeRemover);
-      
+
       $botaoDeRemover.addEventListener('click', apagaComentario);
 
       let $botaoDeResposta = document.createElement("button");
@@ -597,7 +606,7 @@ async function listarComentarios(div) {
       console.log("aqui o que foi clicado" + $botaoDoComentarioQueFoiClicado.id);
       let numeroDoComentario = $botaoDoComentarioQueFoiClicado.id;
       comentarioSelecionado = comentarios[numeroDoComentario];
-      console.log(comentarioSelecionado.id); 
+      console.log(comentarioSelecionado.id);
       $botaoDoComentarioQueFoiClicado.addEventListener('click', function(){});
     })
 
@@ -609,7 +618,7 @@ async function listarComentarios(div) {
 
 async function listarCampanhasDoUsuario() {
   //let resposta = await fetch(baseURL + 'campanha/' + )
-  return null; 
+  return null;
 }
 
 function atualizar() {

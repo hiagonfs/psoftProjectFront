@@ -30,33 +30,28 @@
     </template>
 
     <template id="principalPagina">
-
+      <div class="todo">
+        <h2>AJudE: AquiJUntosDoandoEsperança</h2>
+      </div>
         <button id="logar">Login</button>
         <button id="irCadastrarUsuario">Cadastrar Usuário</button>
-
-        <h2>Buscar Campanhas</h2>
-
-        <div id="ferramentasBusca">
-          <div class="lado">
-            <input id="buscaCampanha" type="text">
-          </div>
-          <div class="lado menor">
-            <form id="metodoOrdenacaoForm">
-                <select id="metodoOrdenacao" name="metodoOrdenacao">
-                  <option value="quantia">Quantia
-                    <option value="data" selected>Data
-                      <option value="likes">Likes
-                </select>
-            </form>
-          </div>
-          <div class="lado menor direita">
-            <button id="buscarCampanhasSelecionadas">Pesquisar</button>
-          </div>
-        </div>
 
         <div class="todo">
           <h2>Campanhas Ativas (top5):</h2>
         </div>
+        <div class="lado menor">
+          <form id="metodoOrdenacaoForm">
+              <select id="metodoOrdenacao" name="metodoOrdenacao">
+                <option value="meta">Quantia
+                  <option value="data" selected>Data
+                    <option value="like">Likes
+              </select>
+          </form>
+        </div>
+        <div class="lado menor direita">
+          <button id="ordenarTop5">Ordenar</button>
+        </div>
+      </div>
           <div id="campanhasTop5"></div>
 
     </template>
