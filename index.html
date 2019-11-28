@@ -39,6 +39,8 @@
         <div class="todo">
           <h2>Campanhas Ativas (top5):</h2>
         </div>
+        <div class="todo">
+        
         <div class="lado menor">
           <form id="metodoOrdenacaoForm">
               <select id="metodoOrdenacao" name="metodoOrdenacao">
@@ -52,7 +54,8 @@
           <button id="ordenarTop5">Ordenar</button>
         </div>
       </div>
-          <div id="campanhasTop5"></div>
+      </div>
+          <div id="campanhasTop5" class="todo"></div>
 
     </template>
 
@@ -86,8 +89,6 @@
         <button id="irCadastrarCampanha">Cadastrar Campanha</button>
         <button id="sairDoSistema">Sair</button>
 
-        <button id="pesquisarMinhasCampanhas">Minhas campanhas</button>
-
         <h2>Buscar Campanhas</h2>
 
         <div id="ferramentasBusca">
@@ -114,8 +115,6 @@
         </div>
 
         <div id="infosCampanhas"></div>
-
-        <div id="infosMinhasCampanhas"></div>
 
     </template>
 
@@ -233,6 +232,7 @@
       <h1 id="nomeUsuario"></h1>
       <p id="emailUsuario"></p>
       <h2>Campanhas que criou</h2>
+      <div id="infosMinhasCampanhas"></div>
       <h2>Campanhas que contribuiu</h2>
     </template>
 

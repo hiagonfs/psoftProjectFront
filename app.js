@@ -79,6 +79,7 @@ async function listaTop5Campanhas() {
 
     let campanhas = [];
 
+//  (async () => {
     json.forEach((e, i) => {
       let $divParaCampanhas = document.getElementById("campanhasTop5");
       $divParaCampanhas.innerHTML = '';
@@ -86,6 +87,7 @@ async function listaTop5Campanhas() {
       campanhas.push(json[i]);
       buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
     });
+//  })();
 
     var quemFoiClicado = document.getElementById("campanhasTop5");
 
@@ -177,9 +179,6 @@ async function viewHome() {
       let $botaoParaSairDoSistema = document.querySelector("#sairDoSistema");
       $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
 
-      let $botaoRetornaCampanhasDoUsuario = document.querySelector("#pesquisarMinhasCampanhas");
-      $botaoRetornaCampanhasDoUsuario.addEventListener('click', buscaCampanhasDoUsuario); 
-
       // preenchimento com informacoes da campanha
       let $informacoesCampanha = document.querySelector("#infosCampanhas");
       $informacoesCampanha.innerHTML = '';
@@ -208,6 +207,7 @@ async function viewPerfilUsuario() {
     nomeUsuario.innerText = json.nome + " " + json.sobrenome;
     let $emailUsuario = document.querySelector('emailUsuario');
     emailUsuario.innerText = json.email;
+    buscaCampanhasDoUsuario();
   }
   else {
     alert(json);
@@ -397,33 +397,31 @@ async function buscaCampanhasDoUsuario() {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem("token")}
-  });  
+  });
 
   let json = await resposta.json();
 
   if (resposta.status == 200) {
 
-    let $divParaInformacoes = document.getElementById("infosMinhasCampanhas");
-    $divParaInformacoes.innerHTML = '';
+    let campanhas = [];
 
-    let $infosTitulo = document.createElement("h1");
-    $infosTitulo.innerHTML = '--' + '\n' + 
-    'Aqui estão suas campanhas' + '\n' 
-    + '--';
-    $divParaInformacoes.appendChild($infosTitulo); 
-
+//  (async () => {
     json.forEach((e, i) => {
-      
-      let $pCampanha = document.createElement("p");
-      $divParaInformacoes.appendChild($pCampanha);
+      let $divParaCampanhas = document.getElementById("infosMinhasCampanhas");
+      $divParaCampanhas.innerHTML = '';
 
-      $pCampanha.innerText = "=====================================================================" + "\n" +
-      "Nome: " + json[i].nome + "\n" +
-      "Descricao: " + json[i].descricao + "\n" +
-      "Dono: " + json[i].dono.email + "\n" +
-      "Deadline: " + json[i].deadline + "\n" +
-      "=====================================================================";
+      campanhas.push(json[i]);
+      buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
+    });
+//  })();
 
+    var quemFoiClicado = document.getElementById("infosMinhasCampanhas");
+
+    quemFoiClicado.addEventListener("click", function(event) {
+      let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
+      let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
+      campanhaSelecionada = campanhas[numeroCampanha];
+      $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual);
     });
   } else {
     alert('Algum erro ocorreu na busca das campanhas! Aguarde...');
@@ -595,6 +593,7 @@ async function apagaComentario() {
 
   if (resposta.status == 200) {
     alert("Comentário removido!");
+    paginaCampanhaIndividual();
   } else {
     alert("Você não pode remover esse comentário!");
   }
