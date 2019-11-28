@@ -1,6 +1,5 @@
 let username;
-//const baseURL = 'https://psoft-ajude.herokuapp.com/'
-const baseURL = 'http://localhost:8080/'
+const baseURL = 'https://psoft-ajude.herokuapp.com/'
 let $viewer = document.querySelector('#viewer');
 let URL_BASE = '';
 let campanhaSelecionada;
