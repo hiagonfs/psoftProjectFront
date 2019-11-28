@@ -11,7 +11,6 @@ Nenhuma dependência é necessária para executar o projeto.
 ```
 
 ## Deploy
-O link para deploy da aplicação (apenas Backend) está no link: https://psoft-ajude.herokuapp.com/
 O link para deploy da aplicação (Backend + Frontend) está no link: http://ajude.netlify.com/
 
 ## Vídeo demonstrativo
