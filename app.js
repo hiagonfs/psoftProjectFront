@@ -512,8 +512,27 @@ function paginaCampanhaIndividual() {
   listarComentarios($comentariosCampanhaDiv);
 }
 
-function curtir() {
-  return null;
+async function curtir() {
+  let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/curtir', {
+    'method': 'POST',
+    'body': `{}`,
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  })
+
+  let json = await resposta.json();
+
+  if (resposta.status == 201) {
+    alert('Pronto! Você curtiu a campanha!');
+    console.log("entrou aqui");
+  }
+  if (resposta.status == 200) {
+    alert('Você tirou seu like da campanha!');
+    console.log("caiu no deslike");
+  }
+  else {
+    alert(json);
+  };
 }
 
 function doar() {
