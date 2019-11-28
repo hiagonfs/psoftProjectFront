@@ -177,6 +177,9 @@ async function viewHome() {
       let $botaoParaSairDoSistema = document.querySelector("#sairDoSistema");
       $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
 
+      let $botaoRetornaCampanhasDoUsuario = document.querySelector("#pesquisarMinhasCampanhas");
+      $botaoRetornaCampanhasDoUsuario.addEventListener('click', buscaCampanhasDoUsuario); 
+
       // preenchimento com informacoes da campanha
       let $informacoesCampanha = document.querySelector("#infosCampanhas");
       $informacoesCampanha.innerHTML = '';
@@ -388,6 +391,46 @@ async function buscarCampanhas() {
   }
 }
 
+async function buscaCampanhasDoUsuario() {
+
+  let resposta = await fetch(baseURL + 'campanha/minhasCampanhas', {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  });  
+
+  let json = await resposta.json();
+
+  if (resposta.status == 200) {
+
+    let $divParaInformacoes = document.getElementById("infosMinhasCampanhas");
+    $divParaInformacoes.innerHTML = '';
+
+    let $infosTitulo = document.createElement("h1");
+    $infosTitulo.innerHTML = '--' + '\n' + 
+    'Aqui estão suas campanhas' + '\n' 
+    + '--';
+    $divParaInformacoes.appendChild($infosTitulo); 
+
+    json.forEach((e, i) => {
+      
+      let $pCampanha = document.createElement("p");
+      $divParaInformacoes.appendChild($pCampanha);
+
+      $pCampanha.innerText = "=====================================================================" + "\n" +
+      "Nome: " + json[i].nome + "\n" +
+      "Descricao: " + json[i].descricao + "\n" +
+      "Dono: " + json[i].dono.email + "\n" +
+      "Deadline: " + json[i].deadline + "\n" +
+      "=====================================================================";
+
+    });
+  } else {
+    alert('Algum erro ocorreu na busca das campanhas! Aguarde...');
+  }
+
+}
+
 function buscaQuantoFaltaMeta(campanha, indice, divParaCampanhas) {
 
   let faltaAinda;
@@ -439,7 +482,7 @@ function paginaCampanhaIndividual() {
   meta.value = campanhaSelecionada.meta;
 
   let $botaoDeRetorno = document.querySelector("#voltarDoAcessoCampanha");
-  $botaoDeRetorno.addEventListener('click', viewPrincipal);
+  $botaoDeRetorno.addEventListener('click', viewHome);
 
   let $botaoDeCurtida = document.querySelector("#curtidaCampanha");
   $botaoDeCurtida.addEventListener('click', curtir);
@@ -558,10 +601,6 @@ async function apagaComentario() {
 
 }
 
-async function respondeComentario(idDoComentario) {
-  return null;
-}
-
 async function listarComentarios(div) {
 
   let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentario/listar', {
@@ -591,11 +630,6 @@ async function listarComentarios(div) {
       $pComentario.appendChild($botaoDeRemover);
 
       $botaoDeRemover.addEventListener('click', apagaComentario);
-
-      let $botaoDeResposta = document.createElement("button");
-      $botaoDeResposta.innerHTML = 'Responder comentario';
-      $pComentario.appendChild($botaoDeResposta);
-      $botaoDeResposta.addEventListener('click', respondeComentario);
 
     });
 
