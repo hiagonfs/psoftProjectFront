@@ -30,6 +30,10 @@ Para mais informações sobre Single-Page: https://www.devmedia.com.br/ja-ouviu-
 
 A aplicação foi dividida em 3 arquivos: index.html, app.js, style.css que realizam a comunição de interface da aplicação, buscando as informações no Backend e exibindo ao usuário. 
 
+O back está integrado ao front utilizando a API Fetch, que fornece uma interface JavaScript para acessar e manipular partes do pipeline HTTP, tais como os pedidos e respostas. Ela também fornece o método global fetch() que fornece uma maneira fácil e lógica para buscar recursos de forma assíncrona através da rede.
+
+Quer ver mais sobre a API? Acessa: https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch
+
 ## Tratamento de erros e Código de Status
 
 Os erros são tratados devidamente no backend, com código de status.
