@@ -208,6 +208,7 @@ async function viewPerfilUsuario() {
     let $emailUsuario = document.querySelector('emailUsuario');
     emailUsuario.innerText = json.email;
     buscaCampanhasDoUsuario();
+    buscaCampanhasQueUsuarioContribuiu();
   }
   else {
     alert(json);
@@ -416,6 +417,42 @@ async function buscaCampanhasDoUsuario() {
 //  })();
 
     var quemFoiClicado = document.getElementById("infosMinhasCampanhas");
+
+    quemFoiClicado.addEventListener("click", function(event) {
+      let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
+      let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
+      campanhaSelecionada = campanhas[numeroCampanha];
+      $botaoDaCampanhaQueFoiClicada.addEventListener('click', paginaCampanhaIndividual);
+    });
+  } else {
+    alert('Algum erro ocorreu na busca das campanhas! Aguarde...');
+  }
+
+}
+
+async function buscaCampanhasQueUsuarioContribuiu() {
+
+  let resposta = await fetch(baseURL + 'campanha/quaisDoei', {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  });
+
+  let json = await resposta.json();
+
+  if (resposta.status == 200) {
+
+    let campanhas = [];
+
+    json.forEach((e, i) => {
+      let $divParaCampanhas = document.getElementById("infosCampanhasQueContribui");
+      $divParaCampanhas.innerHTML = '';
+
+      campanhas.push(json[i]);
+      buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
+    });
+
+    var quemFoiClicado = document.getElementById("infosCampanhasQueContribui");
 
     quemFoiClicado.addEventListener("click", function(event) {
       let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
