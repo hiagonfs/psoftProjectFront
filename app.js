@@ -528,8 +528,12 @@ function paginaCampanhaIndividual() {
   let $botaoDeDoar = document.querySelector("#realizarDoacao");
   $botaoDeDoar.addEventListener('click', doar);
 
+  let $botaoAtualizarComentariosDiv = document.querySelector("#atualizarCampanha");
+  $botaoAtualizarComentariosDiv.addEventListener('click', paginaCampanhaIndividual);
+
   let $comentariosCampanhaDiv = document.querySelector("#comentariosCampanha");
   $comentariosCampanhaDiv.innerHTML = '';
+
 
   listarComentarios($comentariosCampanhaDiv);
 
@@ -684,11 +688,6 @@ async function listarComentarios(div) {
   else {
     alert(json);
   }
-}
-
-async function listarCampanhasDoUsuario() {
-  //let resposta = await fetch(baseURL + 'campanha/' + )
-  return null;
 }
 
 function atualizar() {
