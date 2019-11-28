@@ -13,11 +13,9 @@ let criterioDeOrdenacao;
   if (["", "#principalPagina"].includes(hash)) {
     viewPrincipal();
   }
-
 }());
 
 window.onhashchange = function () {
-
   let hash = window.location.hash;
 
   if (["#login"].includes(hash)){
@@ -37,11 +35,9 @@ window.onhashchange = function () {
   }
 
   URL_BASE + location.hash
-
 }
 
 function viewPrincipal() {
-
   window.location.hash = '';
 
   let $template = document.querySelector('#principalPagina');
@@ -69,10 +65,7 @@ function sleep(milliseconds) {
 }
 
 async function listaTop5Campanhas() {
-
   criterioDeOrdenacao = document.querySelector("#metodoOrdenacao").value;
-
-  console.log(criterioDeOrdenacao);
 
   let resposta = await fetch(baseURL + 'campanha/ordenadas/' + criterioDeOrdenacao, {
     'method': 'GET',
@@ -82,13 +75,9 @@ async function listaTop5Campanhas() {
 
   let json = await resposta.json();
 
-  console.log(json);
-
   if (resposta.status == 200) {
-
     let campanhas = [];
 
-//  (async () => {
     json.forEach((e, i) => {
       let $divParaCampanhas = document.getElementById("campanhasTop5");
       $divParaCampanhas.innerHTML = '';
@@ -97,10 +86,8 @@ async function listaTop5Campanhas() {
       buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
       sleep(15);
     });
-//  })();
 
     var quemFoiClicado = document.getElementById("campanhasTop5");
-
     quemFoiClicado.addEventListener("click", function(event) {
       let $botaoDaCampanhaQueFoiClicada = event.target; // este é o elemento clicado
       let numeroCampanha = $botaoDaCampanhaQueFoiClicada.id;
@@ -114,92 +101,88 @@ async function listaTop5Campanhas() {
 }
 
 function viewLogin() {
-
   window.location.hash = 'login';
 
-    let $template = document.querySelector('#viewLogin');
-    $viewer.innerHTML = $template.innerHTML;
+  let $template = document.querySelector('#viewLogin');
+  $viewer.innerHTML = $template.innerHTML;
 
-    let $botaoLogar = document.querySelector("#logar");
-    $botaoLogar.addEventListener('click', logar);
+  let $botaoLogar = document.querySelector("#logar");
+  $botaoLogar.addEventListener('click', logar);
 
-    let $botaoVoltarDoLogin = document.querySelector("#voltarDoLogin");
-    $botaoVoltarDoLogin.addEventListener('click', viewPrincipal);
-
+  let $botaoVoltarDoLogin = document.querySelector("#voltarDoLogin");
+  $botaoVoltarDoLogin.addEventListener('click', viewPrincipal);
 }
 
 async function logar() {
+  let email = document.querySelector("#email").value;
+  let senha = document.querySelector("#senha").value;
 
-     let email = document.querySelector("#email").value;
-     let senha = document.querySelector("#senha").value;
-     let resposta = await fetch(baseURL + 'auth/login', {
-         'method': 'POST',
-         'body': `{"email": "${email}",
-                   "senha": "${senha}"}`,
-         'headers': {'Content-Type': 'application/json'}
-       })
-      let json = await resposta.json();
+  let resposta = await fetch(baseURL + 'auth/login', {
+      'method': 'POST',
+      'body': `{"email": "${email}",
+                "senha": "${senha}"}`,
+      'headers': {'Content-Type': 'application/json'}
+    })
 
-      if (resposta.status == 200) {
-        localStorage.setItem('token', json.token);
-        localStorage.setItem('emailUsuario', email);
-        viewHome();
-      }
-      else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('emailUsuario');
-        alert(json.message);
-      }
+   let json = await resposta.json();
+
+   if (resposta.status == 200) {
+     localStorage.setItem('token', json.token);
+     localStorage.setItem('emailUsuario', email);
+     viewHome();
+   }
+   else {
+     localStorage.removeItem('token');
+     localStorage.removeItem('emailUsuario');
+     alert(json.message);
+   }
 }
 
 async function viewHome() {
-
   window.location.hash = 'home';
 
-    let $template = document.querySelector('#viewHome');
-    $viewer.innerHTML = $template.innerHTML;
+  let $template = document.querySelector('#viewHome');
+  $viewer.innerHTML = $template.innerHTML;
 
-    let resposta = await fetch(baseURL + 'usuario', {
-      'method': 'GET',
-      'headers': {'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + localStorage.getItem("token")}
-    })
+  let resposta = await fetch(baseURL + 'usuario', {
+    'method': 'GET',
+    'headers': {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")}
+  })
 
-    let json = await resposta.json();
+  let json = await resposta.json();
 
-    if (resposta.status == 200) {
+  if (resposta.status == 200) {
+    // captura de informacoes do usuario e preenchimento da tela
+    let $informacoes = document.querySelector("#infoUsuario");
+    $informacoes.innerHTML = '';
 
-      // captura de informacoes do usuario e preenchimento da tela
-      let $informacoes = document.querySelector("#infoUsuario");
-      $informacoes.innerHTML = '';
+    let $h1 = document.createElement("h1");
+    $informacoes.appendChild($h1);
+    $h1.innerText = json.nome +" " + json.sobrenome + "!\n";
 
-      let $h1 = document.createElement("h1");
-      $informacoes.appendChild($h1);
-      $h1.innerText = json.nome +" " + json.sobrenome + "!\n";
+    let $botaoIrPerfilUsuario = document.querySelector('#irVerPerfil');
+    $botaoIrPerfilUsuario.addEventListener('click', viewPerfilUsuario);
 
-      let $botaoIrPerfilUsuario = document.querySelector('#irVerPerfil');
-      $botaoIrPerfilUsuario.addEventListener('click', viewPerfilUsuario);
+    let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
+    $botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
 
-      let $botaoIrCadastrarCampanha = document.querySelector("#irCadastrarCampanha");
-      $botaoIrCadastrarCampanha.addEventListener('click', viewCadastraCampanha);
+    let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
+    $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
 
-      let $botaoBuscarCampanhasSelecionadas = document.querySelector("#buscarCampanhasSelecionadas");
-      $botaoBuscarCampanhasSelecionadas.addEventListener('click', buscarCampanhas);
+    let $botaoParaSairDoSistema = document.querySelector("#sairDoSistema");
+    $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
 
-      let $botaoParaSairDoSistema = document.querySelector("#sairDoSistema");
-      $botaoParaSairDoSistema.addEventListener('click', viewPrincipal);
-
-      // preenchimento com informacoes da campanha
-      let $informacoesCampanha = document.querySelector("#infosCampanhas");
-      $informacoesCampanha.innerHTML = '';
-    }
-    else {
-      alert(json.message);
-    }
+    // preenchimento com informacoes da campanha
+    let $informacoesCampanha = document.querySelector("#infosCampanhas");
+    $informacoesCampanha.innerHTML = '';
+  }
+  else {
+    alert(json.message);
+  }
 }
 
 async function viewPerfilUsuario() {
-
   let $template = document.querySelector('#viewPerfilUsuario');
   $viewer.innerHTML = $template.innerHTML;
 
@@ -223,11 +206,9 @@ async function viewPerfilUsuario() {
   else {
     alert(json);
   }
-
 }
 
 function viewCadastroUsuario () {
-
   window.location.hash = 'cadastraUsuario';
 
   let $template = document.querySelector('#viewCadastroUsuario');
@@ -246,6 +227,7 @@ async function cadastrar_usuario() {
   let email = document.querySelector("#email").value;
   let numCartaoCredito = document.querySelector("#numCartaoCredito").value;
   let senha = document.querySelector("#senha").value;
+
   let resposta = await fetch(baseURL + 'usuario', {
     'method': 'POST',
     'body': `{"nome": "${nome}",
@@ -255,6 +237,7 @@ async function cadastrar_usuario() {
               "senha": "${senha}"}`,
     'headers': {'Content-Type': 'application/json'}
   })
+
   let json = await resposta.json();
 
   if (resposta.status == 201) {
@@ -267,7 +250,6 @@ async function cadastrar_usuario() {
 }
 
 function viewCadastraCampanha() {
-
   window.location.hash = 'cadastroCampanha';
 
   let $template = document.querySelector('#viewCadastraCampanha');
@@ -278,11 +260,9 @@ function viewCadastraCampanha() {
 
   let $botaoVoltarDaCampanha = document.querySelector("#voltarDoCadastroCampanha");
   $botaoVoltarDaCampanha.addEventListener('click', viewHome);
-
 }
 
 async function cadastrar_campanha() {
-
   let nome = document.querySelector("#nome").value;
   let descricao = document.querySelector("#descricao").value;
   let deadline = document.querySelector("#deadline").value;
@@ -315,7 +295,6 @@ async function cadastrar_campanha() {
 }
 
 function defineURLUnicaCampanha (nomeCurto) {
-
   let URLCampanha = nomeCurto;
   console.log(URLCampanha);
 
@@ -348,7 +327,6 @@ function removeAcento (text) {
 }
 
 function viewPaginaCampanha() {
-
   window.location.hash = 'campanha';
 
   let $template = document.querySelector('#viewPaginaCampanha');
@@ -362,11 +340,9 @@ function viewPaginaCampanha() {
 
   let $botaoVoltarParaPrincipalTela = document.querySelector("#voltandoParaAPrincipal");
   $botaoVoltarParaPrincipalTela.addEventListener('click', viewHome);
-
 }
 
 async function buscarCampanhas() {
-
   let textoDaBusca = document.querySelector("#buscaCampanha").value;
 
   let resposta = await fetch(baseURL + 'campanha?nome=' + textoDaBusca, {
@@ -403,7 +379,6 @@ async function buscarCampanhas() {
 }
 
 async function buscaCampanhasDoUsuario() {
-
   let resposta = await fetch(baseURL + 'campanha/minhasCampanhas', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
@@ -413,10 +388,8 @@ async function buscaCampanhasDoUsuario() {
   let json = await resposta.json();
 
   if (resposta.status == 200) {
-
     let campanhas = [];
 
-//  (async () => {
     json.forEach((e, i) => {
       let $divParaCampanhas = document.getElementById("infosMinhasCampanhas");
       $divParaCampanhas.innerHTML = '';
@@ -424,7 +397,6 @@ async function buscaCampanhasDoUsuario() {
       campanhas.push(json[i]);
       buscaQuantoFaltaMeta(json[i], i, $divParaCampanhas);
     });
-//  })();
 
     var quemFoiClicado = document.getElementById("infosMinhasCampanhas");
 
@@ -437,11 +409,9 @@ async function buscaCampanhasDoUsuario() {
   } else {
     alert('Algum erro ocorreu na busca das campanhas! Aguarde...');
   }
-
 }
 
 async function buscaCampanhasQueUsuarioContribuiu() {
-
   let resposta = await fetch(baseURL + 'campanha/quaisDoei', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
@@ -451,7 +421,6 @@ async function buscaCampanhasQueUsuarioContribuiu() {
   let json = await resposta.json();
 
   if (resposta.status == 200) {
-
     let campanhas = [];
 
     json.forEach((e, i) => {
@@ -477,7 +446,6 @@ async function buscaCampanhasQueUsuarioContribuiu() {
 }
 
 function buscaQuantoFaltaMeta(campanha, indice, divParaCampanhas) {
-
   let faltaAinda;
 
   fetch(baseURL + 'campanha/' + campanha.id + '/quantoFalta', {
@@ -505,13 +473,10 @@ function buscaQuantoFaltaMeta(campanha, indice, divParaCampanhas) {
       $botaoCamp.innerHTML = 'Selecionar esta campanha';
       divParaCampanhas.appendChild($botaoCamp);
       $botaoCamp.id = indice;
-
   });
-
 }
 
 function paginaCampanhaIndividual() {
-
   window.location.hash = 'campanha/' + campanhaSelecionada.nomeCurto;
 
   let $template = document.querySelector('#viewAcessoCampanha');
@@ -544,9 +509,7 @@ function paginaCampanhaIndividual() {
   let $comentariosCampanhaDiv = document.querySelector("#comentariosCampanha");
   $comentariosCampanhaDiv.innerHTML = '';
 
-
   listarComentarios($comentariosCampanhaDiv);
-
 }
 
 function curtir() {
@@ -554,7 +517,6 @@ function curtir() {
 }
 
 function doar() {
-
   window.location.hash = '/campanha/' + campanhaSelecionada.nomeCurto + '/doacao';
 
   let $template = document.querySelector('#viewDeDoacao');
@@ -568,11 +530,9 @@ function doar() {
 
   let $botaoEnviarDoacao = document.querySelector('#enviarDoacao');
   $botaoEnviarDoacao.addEventListener('click', enviaDoacao);
-
 }
 
 function comentar() {
-
   window.location.hash = '/campanha/' + campanhaSelecionada.nomeCurto + '/addComentario';
 
   let $template = document.querySelector('#viewDeComentario');
@@ -586,11 +546,9 @@ function comentar() {
 
   let $botaoEnviarComentario = document.querySelector('#comentarCampanha');
   $botaoEnviarComentario.addEventListener('click', enviaComentario);
-
 }
 
 async function enviaDoacao() {
-
   let valorCapturado = document.querySelector("#valorDoacao").value;
 
   let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/doacao', {
@@ -609,11 +567,9 @@ async function enviaDoacao() {
   else {
     alert(json);
   }
-
 }
 
 async function enviaComentario() {
-
   let comentarioCapturado = document.querySelector("#textoComentario").value;
 
   let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentar', {
@@ -635,7 +591,6 @@ async function enviaComentario() {
 }
 
 async function apagaComentario() {
-
   let resposta = await fetch(baseURL + 'campanha/comentario/deleta/' + comentarioSelecionado.id, {
     'method': 'DELETE',
     'headers': {'Content-Type': 'application/json',
@@ -648,11 +603,9 @@ async function apagaComentario() {
   } else {
     alert("Você não pode remover esse comentário!");
   }
-
 }
 
 async function listarComentarios(div) {
-
   let resposta = await fetch(baseURL + 'campanha/' + campanhaSelecionada.id + '/comentario/listar', {
     'method': 'GET',
     'headers': {'Content-Type': 'application/json',
